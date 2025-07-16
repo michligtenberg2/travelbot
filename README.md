@@ -18,7 +18,13 @@ Deze repository bevat:
 1. Klik op **"Use this template"** of open deze repo in GitHub.
 2. Kies **"Code > Codespaces > Create new codespace"**.
 3. Wacht tot de omgeving is opgebouwd (~1 min).
-4. Start de backend met:
+4. Installeer de vereisten:
+
+```bash
+pip install -r backend/requirements.txt
+```
+
+5. Start de backend met:
 
 ```bash
 python app.py

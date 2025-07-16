@@ -18,7 +18,13 @@ This repo contains:
 1. Click **“Use this template”** or open this repo in GitHub.
 2. Click **“Code > Codespaces > Create new codespace”**.
 3. Wait for it to set up (~1 min).
-4. Run the backend:
+4. Install the requirements:
+
+```bash
+pip install -r backend/requirements.txt
+```
+
+5. Run the backend:
 
 ```bash
 python app.py
