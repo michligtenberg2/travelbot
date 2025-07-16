@@ -32,7 +32,8 @@ class CompanionService : Service() {
         handler.post(object : Runnable {
             override fun run() {
                 fetchAndSpeak()
-                handler.postDelayed(this, 15 * 60 * 1000L)
+                val minutes = Settings.getInterval(this@CompanionService)
+                handler.postDelayed(this, minutes * 60 * 1000L)
             }
         })
     }
@@ -41,7 +42,7 @@ class CompanionService : Service() {
         val location = LocationProvider.getLocation(this)
         if (location != null) {
             Thread {
-                val response = ApiClient.sendLocation(location.latitude, location.longitude)
+                val response = ApiClient.sendLocation(this@CompanionService, location.latitude, location.longitude)
                 if (response != null) {
                     ttsManager.speak(response)
                 }
