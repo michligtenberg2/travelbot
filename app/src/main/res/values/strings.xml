@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Travelbot</string>
+    <string name="ask_henk">Stel vraag aan Henk</string>
+    <string name="soundboard">Speel soundboard-zin</string>
+</resources>
