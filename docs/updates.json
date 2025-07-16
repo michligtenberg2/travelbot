@@ -3,5 +3,25 @@
     "date": "2025-07-16",
     "version": "v0.1",
     "description": "Eerste versie van backend, Codex prompt en werkende Android skeleton met TTS."
+  },
+  {
+    "date": "2025-07-16",
+    "version": "68ad2cb",
+    "description": "Update update-pages.yml"
+  },
+  {
+    "date": "2025-07-16",
+    "version": "273cc3f",
+    "description": "Add files via upload"
+  },
+  {
+    "date": "2025-07-16",
+    "version": "0f38a8c",
+    "description": "Add files via upload"
+  },
+  {
+    "date": "2025-07-16",
+    "version": "9e93661",
+    "description": "Merge pull request #6 from michligtenberg2/codex/add-git-pull-rebase-to-changelog-step"
   }
 ]
