@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Travelbot Documentation</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <nav><a href="index.html">Nederlands</a> | English</nav>
+        <h1>📡 Travelbot – Your AI travel companion</h1>
+        <p>Version: <span id="current-version">v0.1</span></p>
+    </header>
+
+    <section>
+        <h2>🔧 What is Travelbot?</h2>
+        <p>
+            Travelbot is an AI travel buddy for the car. Every ~15 minutes it speaks with a grumpy Amsterdam accent about your surroundings, based on GPS data, Wikipedia and a language model. It runs on an old Android phone.
+        </p>
+    </section>
+
+    <section>
+        <h2>🚀 Installation</h2>
+        <ol>
+            <li>Flash your old Android phone with LineageOS (see README).</li>
+            <li>Install the app from the <code>/app/</code> directory.</li>
+            <li>Start the backend with <code>python backend/app.py</code> (e.g. via Codespaces).</li>
+            <li>Let the app connect to your backend and hear Henk chatter!</li>
+        </ol>
+    </section>
+
+    <section>
+        <h2>📜 Update history</h2>
+        <ul id="update-log">
+            <li>Loading updates...</li>
+        </ul>
+    </section>
+
+    <footer>
+        <p>Travelbot is a project by <strong>mich ligtenberg</strong> – 2025</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
