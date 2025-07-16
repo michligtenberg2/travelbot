@@ -23,5 +23,10 @@
     "date": "2025-07-16",
     "version": "9e93661",
     "description": "Merge pull request #6 from michligtenberg2/codex/add-git-pull-rebase-to-changelog-step"
+  },
+  {
+    "date": "2025-07-16",
+    "version": "d3530be",
+    "description": "Merge pull request #7 from michligtenberg2/codex/herschrijf-readme-en-update-docs"
   }
 ]
