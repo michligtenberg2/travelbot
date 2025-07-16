@@ -24,14 +24,8 @@ jobs:
           SHORT_SHA=$(git rev-parse --short HEAD)
           COMMIT_MSG=$(git log -1 --pretty=%s)
           DATE=$(date -u +%Y-%m-%d)
-          node - "$DATE" "$SHORT_SHA" "$COMMIT_MSG" <<'NODE'
-          const [date, sha, msg] = process.argv.slice(2);
-          const fs = require('fs');
-          const file = 'docs/updates.json';
-          const data = JSON.parse(fs.readFileSync(file, 'utf8'));
-          data.push({ date, version: sha, description: msg });
-          fs.writeFileSync(file, JSON.stringify(data, null, 2));
-NODE
+          DATE="$DATE" SHORT_SHA="$SHORT_SHA" COMMIT_MSG="$COMMIT_MSG" \
+            node -e "const fs=require('fs');const f='docs/updates.json';const d=JSON.parse(fs.readFileSync(f,'utf8'));d.push({date:process.env.DATE,version:process.env.SHORT_SHA,description:process.env.COMMIT_MSG});fs.writeFileSync(f,JSON.stringify(d,null,2));"
           git config user.name 'github-actions'
           git config user.email 'github-actions@github.com'
           git add docs/updates.json
