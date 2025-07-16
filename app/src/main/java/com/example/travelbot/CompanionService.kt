@@ -10,11 +10,16 @@ import android.os.Build
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
+import android.location.Location
+import android.location.Geocoder
+import java.util.Locale
 
 class CompanionService : Service() {
 
     private val handler = Handler(Looper.getMainLooper())
     private lateinit var ttsManager: TtsManager
+    private var lastLocation: Location? = null
+    private var lastMunicipality: String? = null
 
     override fun onCreate() {
         super.onCreate()
@@ -39,14 +44,31 @@ class CompanionService : Service() {
     }
 
     private fun fetchAndSpeak() {
-        val location = LocationProvider.getLocation(this)
-        if (location != null) {
+        val location = LocationProvider.getLocation(this) ?: return
+
+        val municipality = getMunicipality(location)
+        val distance = lastLocation?.distanceTo(location) ?: Float.MAX_VALUE
+        val changed = municipality != lastMunicipality
+
+        if (distance > 500 || changed) {
+            lastLocation = location
+            lastMunicipality = municipality
             Thread {
                 val response = ApiClient.sendLocation(this@CompanionService, location.latitude, location.longitude)
                 if (response != null) {
                     ttsManager.speak(response)
                 }
             }.start()
+        }
+    }
+
+    private fun getMunicipality(loc: Location): String {
+        return try {
+            val geocoder = Geocoder(this, Locale.getDefault())
+            val addr = geocoder.getFromLocation(loc.latitude, loc.longitude, 1)?.firstOrNull()
+            addr?.subAdminArea ?: addr?.locality ?: ""
+        } catch (e: Exception) {
+            ""
         }
     }
 
