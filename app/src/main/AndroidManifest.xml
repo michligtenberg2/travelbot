@@ -10,6 +10,8 @@
         android:allowBackup="true"
         android:label="Travelbot"
         android:icon="@mipmap/ic_launcher">
+        <activity android:name=".SettingsActivity" />
+        <activity android:name=".SoundboardActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
