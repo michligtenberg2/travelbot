@@ -1,0 +1,44 @@
+name: Update Docs
+
+on:
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  append-log:
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Append commit to updates
+        run: |
+          SHORT_SHA=$(git rev-parse --short HEAD)
+          COMMIT_MSG=$(git log -1 --pretty=%s)
+          DATE=$(date -u +%Y-%m-%d)
+          DATE="$DATE" SHORT_SHA="$SHORT_SHA" COMMIT_MSG="$COMMIT_MSG" \
+            node -e "const fs=require('fs');const f='docs/updates.json';const d=JSON.parse(fs.readFileSync(f,'utf8'));d.push({date:process.env.DATE,version:process.env.SHORT_SHA,description:process.env.COMMIT_MSG});fs.writeFileSync(f,JSON.stringify(d,null,2));"
+          git config user.name 'github-actions'
+          git config user.email 'github-actions@github.com'
+          git add docs/updates.json
+          git commit -m "Update docs with $SHORT_SHA [skip ci]" || echo "No changes"
+          git push
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: docs
+
+      - name: Deploy Pages
+        id: deployment
+        uses: actions/deploy-pages@v1
+        with:
+          artifact_name: github-pages
