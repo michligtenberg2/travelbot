@@ -39,3 +39,7 @@ Of voeg deze toe via Codespaces secrets.
 ## 📱 Android
 
 Installeer de app uit de map `/app/` op je telefoon. De app roept de backend aan en laat Henk vervolgens zijn opmerkingen uitspreken.
+
+## 🤝 Bijdragen
+
+Wil je `scripts/update_log.js` handmatig draaien om `docs/updates.json` bij te werken? Installeer dan eerst Node.js.
