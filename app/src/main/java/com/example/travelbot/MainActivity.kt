@@ -29,6 +29,7 @@ class MainActivity : AppCompatActivity() {
 
         val askButton = findViewById<Button>(R.id.askButton)
         val soundButton = findViewById<Button>(R.id.soundButton)
+        val settingsButton = findViewById<Button>(R.id.settingsButton)
         val input = findViewById<EditText>(R.id.questionInput)
 
         askButton.setOnClickListener {
@@ -36,7 +37,7 @@ class MainActivity : AppCompatActivity() {
             val loc = LocationProvider.getLocation(this)
             if (loc != null && question.isNotBlank()) {
                 Thread {
-                    val response = ApiClient.sendLocation(loc.latitude, loc.longitude, question)
+                    val response = ApiClient.sendLocation(this, loc.latitude, loc.longitude, question)
                     if (response != null) {
                         runOnUiThread { input.text.clear() }
                         ttsManager.speak(response)
@@ -45,8 +46,12 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        settingsButton.setOnClickListener {
+            startActivity(Intent(this, SettingsActivity::class.java))
+        }
+
         soundButton.setOnClickListener {
-            ttsManager.speak("Hou je bek, ik probeer hier wat te vertellen!")
+            startActivity(Intent(this, SoundboardActivity::class.java))
         }
     }
 

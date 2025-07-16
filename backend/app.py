@@ -12,9 +12,10 @@ def comment():
     lat = data.get('lat')
     lon = data.get('lon')
     question = data.get('question')
+    style = data.get('style', 'Jordanees')
 
     place_summary = get_wikipedia_summary(lat, lon)
-    prompt = build_prompt(place_summary, question)
+    prompt = build_prompt(place_summary, question, style)
     response_text = query_openai(prompt)
 
     return jsonify(text=response_text)
@@ -34,10 +35,16 @@ def get_wikipedia_summary(lat, lon):
     except Exception as e:
         return "Kon geen informatie ophalen."
 
-def build_prompt(summary, question=None):
-    base = f"""Je bent Henk, een Amsterdammer van 58 uit de Jordaan met een grote bek.
-Je praat plat Amsterdams, haat Italië, maar weet veel van cultuur.
-Je geeft grappige, soms sarcastische, maar informatieve opmerkingen over de plekken waar iemand langsrijdt.
+def build_prompt(summary, question=None, style='Jordanees'):
+    if style == 'Belg':
+        persona = 'Je bent Henk, een vrolijke Belg uit Antwerpen met een zachte G.'
+    elif style == 'Brabander':
+        persona = 'Je bent Henk, een gemoedelijke Brabander die met een zachte G praat.'
+    else:
+        persona = 'Je bent Henk, een Amsterdammer van 58 uit de Jordaan met een grote bek.'
+
+    base = f"""{persona}
+Je praat graag over cultuur en hebt altijd een grappige opmerking.
 
 Samenvatting van de plek:
 {summary}

@@ -1,5 +1,6 @@
 package com.example.travelbot
 
+import android.content.Context
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -10,13 +11,13 @@ import java.net.URL
 
 object ApiClient {
 
-    private const val BASE_URL = "http://10.0.2.2:5000"
-
-    fun sendLocation(lat: Double, lon: Double, question: String? = null): String? {
-        val url = URL("$BASE_URL/comment")
+    fun sendLocation(context: Context, lat: Double, lon: Double, question: String? = null): String? {
+        val baseUrl = Settings.getBackendUrl(context)
+        val url = URL("$baseUrl/comment")
         val body = JSONObject().apply {
             put("lat", lat)
             put("lon", lon)
+            put("style", Settings.getPersonality(context))
             if (question != null) put("question", question)
         }.toString()
 
