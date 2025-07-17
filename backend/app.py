@@ -1,3 +1,10 @@
+"""Flask backend voor Travelbot.
+
+Dit eenvoudige API-script ontvangt GPS-coördinaten van de Android-app en
+vraagt OpenAI om een korte opmerking over de locatie. Het resultaat wordt als
+JSON teruggestuurd naar de telefoon zodat Text-to-Speech het kan voorlezen.
+"""
+
 from flask import Flask, request, jsonify
 import requests
 import os
@@ -8,6 +15,7 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 @app.route('/comment', methods=['POST'])
 def comment():
+    """Endpoint dat een opmerking over de huidige locatie retourneert."""
     data = request.get_json()
     lat = data.get('lat')
     lon = data.get('lon')
@@ -21,6 +29,7 @@ def comment():
     return jsonify(text=response_text)
 
 def get_wikipedia_summary(lat, lon):
+    """Geef een korte samenvatting van de plek op basis van Wikipedia."""
     try:
         geo_url = f"https://en.wikipedia.org/w/api.php?action=query&list=geosearch&gscoord={lat}%7C{lon}&gsradius=10000&gslimit=1&format=json"
         geo_resp = requests.get(geo_url).json()
@@ -36,6 +45,7 @@ def get_wikipedia_summary(lat, lon):
         return "Kon geen informatie ophalen."
 
 def build_prompt(summary, question=None, style='Jordanees'):
+    """Stel een prompt samen voor het taalmodel."""
     if style == 'Belg':
         persona = 'Je bent Henk, een vrolijke Belg uit Antwerpen met een zachte G.'
     elif style == 'Brabander':
@@ -56,6 +66,7 @@ Samenvatting van de plek:
         return base + "Geef één humoristische zin over deze plek."
 
 def query_openai(prompt):
+    """Stuur de prompt naar OpenAI en geef het antwoord terug."""
     try:
         headers = {
             "Authorization": f"Bearer {OPENAI_API_KEY}",
