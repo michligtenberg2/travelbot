@@ -4,7 +4,7 @@ import android.content.Context
 import android.speech.tts.TextToSpeech
 import java.util.Locale
 
-class TtsManager(context: Context) : TextToSpeech.OnInitListener {
+class TtsManager(private val context: Context) : TextToSpeech.OnInitListener {
 
     private var tts: TextToSpeech = TextToSpeech(context, this)
 
@@ -15,7 +15,14 @@ class TtsManager(context: Context) : TextToSpeech.OnInitListener {
     }
 
     fun speak(text: String) {
-        tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "henk")
+        val persona = PersonaManager.getPersona(Settings.getPersonality(context))
+        persona.ttsVoice?.let { voiceName ->
+            val voice = tts.voices.firstOrNull { it.name.contains(voiceName, true) }
+            if (voice != null) tts.voice = voice
+        }
+        tts.setPitch(persona.pitch)
+        tts.setSpeechRate(persona.speed)
+        tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, persona.name)
     }
 
     fun shutdown() {
