@@ -4,9 +4,9 @@ import android.content.Context
 import android.speech.tts.TextToSpeech
 import java.util.Locale
 
-class TtsManager(context: Context) : TextToSpeech.OnInitListener {
+class TtsManager(private val ctx: Context) : TextToSpeech.OnInitListener {
 
-    private var tts: TextToSpeech = TextToSpeech(context, this)
+    private var tts: TextToSpeech = TextToSpeech(ctx, this)
 
     override fun onInit(status: Int) {
         if (status == TextToSpeech.SUCCESS) {
@@ -15,6 +15,7 @@ class TtsManager(context: Context) : TextToSpeech.OnInitListener {
     }
 
     fun speak(text: String) {
+        if (QuietMode.isSleeping(ctx)) return
         tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "henk")
     }
 
