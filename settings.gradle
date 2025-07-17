@@ -1,0 +1,2 @@
+rootProject.name = 'travelbot'
+include(':app')
