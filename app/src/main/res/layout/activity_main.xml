@@ -29,11 +29,24 @@
         android:layout_height="wrap_content"
         android:text="@string/settings" />
 
-    <TextView
-        android:id="@+id/sleepStatus"
+    <Button
+        android:id="@+id/toggleLogButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/status_awake" />
+        android:text="Toon logs" />
+
+    <ScrollView
+        android:id="@+id/logScroll"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/logView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="12sp" />
+    </ScrollView>
 
 </LinearLayout>
