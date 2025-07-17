@@ -78,5 +78,10 @@
     "date": "2025-07-17",
     "version": "50e9b93",
     "description": "Merge pull request #17 from michligtenberg2/codex/add-personamanager-for-character-selection"
+  },
+  {
+    "date": "2025-07-17",
+    "version": "b3cacd7",
+    "description": "Merge pull request #22 from michligtenberg2/codex/generate-user-guide-for-travelbot-in-markdown"
   }
 ]
