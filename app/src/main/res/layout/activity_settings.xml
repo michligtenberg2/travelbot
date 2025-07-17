@@ -34,6 +34,13 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp" />
 
+    <Switch
+        android:id="@+id/quietSwitch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/quiet_mode"
+        android:layout_marginTop="16dp" />
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/saveButton"
         android:layout_width="match_parent"

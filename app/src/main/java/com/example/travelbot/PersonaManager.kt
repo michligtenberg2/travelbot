@@ -1,40 +1,45 @@
 package com.example.travelbot
 
+import android.speech.tts.TextToSpeech
+
+/**
+ * Holds all available personas and their voice profiles.
+ */
 object PersonaManager {
+    data class VoiceProfile(
+        val pitch: Float,
+        val speechRate: Float,
+        val voiceName: String? = null
+    )
+
+    data class Persona(
+        val name: String,
+        val style: String,
+        val voice: VoiceProfile
+    )
+
     private val personas = listOf(
         Persona(
-            name = "Henk",
-            backendStyle = "Jordanees",
-            ttsVoice = null,
-            pitch = 1.0f,
-            speed = 1.0f
+            name = "Jordanees",
+            style = "Jordanees",
+            voice = VoiceProfile(pitch = 1.0f, speechRate = 1.0f)
         ),
         Persona(
-            name = "Friese boer",
-            backendStyle = "Friese boer",
-            ttsVoice = null,
-            pitch = 0.9f,
-            speed = 1.0f
+            name = "Belg",
+            style = "Belg",
+            voice = VoiceProfile(pitch = 1.1f, speechRate = 0.95f)
         ),
         Persona(
             name = "Brabander",
-            backendStyle = "Brabander",
-            ttsVoice = null,
-            pitch = 1.2f,
-            speed = 1.0f
-        ),
-        Persona(
-            name = "Sarcastische AI",
-            backendStyle = "Sarcastische AI",
-            ttsVoice = null,
-            pitch = 1.0f,
-            speed = 1.1f
+            style = "Brabander",
+            voice = VoiceProfile(pitch = 0.9f, speechRate = 1.05f)
         )
     )
 
-    fun getPersona(name: String): Persona = personas.find { it.name == name } ?: personas.first()
+    val defaultPersona: Persona
+        get() = personas.first()
 
-    fun getNames(): List<String> = personas.map { it.name }
+    fun names(): List<String> = personas.map { it.name }
 
-    fun defaultPersona(): Persona = personas.first()
+    fun get(name: String): Persona = personas.find { it.name == name } ?: defaultPersona
 }

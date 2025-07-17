@@ -1,5 +1,8 @@
 package com.example.travelbot
 
+// Service die op de achtergrond draait en periodiek de locatie ophaalt om een
+// nieuwe opmerking van Henk op te vragen en te laten uitspreken.
+
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -54,6 +57,7 @@ class CompanionService : Service() {
 
     private fun fetchAndSpeak() {
         val location = LocationProvider.getLocation(this) ?: return
+        QuietMode.updateLocation(location)
 
         val municipality = getMunicipality(location)
         val distance = lastLocation?.distanceTo(location) ?: Float.MAX_VALUE
