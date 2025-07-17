@@ -1,41 +1,64 @@
 # 🚗 Travelbot
 
-**Travelbot** is een locatiebewuste reisgenoot voor onderweg. Deze versie van de README is in het Nederlands geschreven. Wil je liever de Engelse uitleg lezen? Ga dan naar [README-en.md](README-en.md).
+[![Docs](https://github.com/michligtenberg2/travelbot/actions/workflows/update-pages.yml/badge.svg)](https://github.com/michligtenberg2/travelbot/actions/workflows/update-pages.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Codespaces Ready](https://github.com/codespaces/badge.svg)](https://github.com/codespaces)
+[![Made with Kotlin & Flask](https://img.shields.io/badge/Made%20with-Kotlin%20%26%20Flask-blue)](#)
 
-Deze repository bevat:
-- ✅ Een Flask-backend (`app.py`) dat locatiegegevens ontvangt en een grappige opmerking genereert via OpenAI.
-- ✅ Een minimale Android-app die de locatie verstuurt en het antwoord via TTS voorleest.
-- ✅ Ondersteuning voor GitHub Codespaces – geen lokale installatie nodig!
+**Travelbot** is een AI-reisgenoot die iedere 15 minuten een grappige opmerking maakt over je huidige locatie. De Android-app praat met een kleine Flask-backend om via OpenAI teksten op te halen.
 
-## 🧠 Wat doet het?
+Lees dit document in het Engels via [README-en.md](README-en.md).
 
-1. De Android-app stuurt GPS-coördinaten naar de endpoint `/comment`.
-2. De backend gebruikt Wikipedia en GPT om een karakteristieke Nederlandse reactie te maken.
-3. De app leest deze reactie hardop voor met Text-to-Speech.
+## 📦 Installatie
 
-## 🚀 Aan de slag in Codespaces
+1. Zorg voor **Python 3.11+** en een Android-telefoon met **Android 8+**.
+2. Kloon deze repository en installeer de vereisten:
 
-1. Klik op **"Use this template"** of open deze repo in GitHub.
-2. Kies **"Code > Codespaces > Create new codespace"**.
-3. Wacht tot de omgeving is opgebouwd (~1 min).
-4. Start de backend met:
+   ```bash
+   git clone https://github.com/michligtenberg2/travelbot.git
+   cd travelbot
+   pip install flask requests
+   ```
 
-```bash
-python app.py
+3. Zet je OpenAI API-sleutel in je omgeving:
+
+   ```bash
+   export OPENAI_API_KEY=sk-xxx
+   ```
+
+4. Start de backend:
+
+   ```bash
+   python backend/app.py
+   ```
+
+5. Open de map `app/` in Android Studio, bouw de app en installeer de APK op je telefoon.
+6. Vul in de app het adres van je backend in en je bent klaar!
+
+## 🎬 Voorbeeldgebruik
+
+Onderstaande afbeelding toont een voorbeeld van Henks reactie en hoe de onderdelen samenhangen.
+
+![Voorbeeld output](data:image/png;base64,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)
+
+![Architectuur](data:image/png;base64,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)
+
+## 📚 Documentatie
+
+Meer uitleg vind je op de [GitHub Pages site](https://michligtenberg2.github.io/travelbot/). Daar staan screenshots, het update-log en een FAQ.
+
+## 📂 Projectstructuur
+
+```
+backend/   Flask API die reacties genereert
+app/       Android-app geschreven in Kotlin
+docs/      Documentatie (GitHub Pages)
 ```
 
-Je backend is vervolgens bereikbaar op `http://localhost:5000` (via port forwarding).
+## 🔗 Bijdragen
 
-## 🔑 API-sleutel instellen
+Zie [CONTRIBUTING.md](CONTRIBUTING.md) voor richtlijnen om mee te bouwen aan dit project.
 
-Zet je API-sleutel in `.bashrc` of in de terminal:
+## 📄 Licentie
 
-```bash
-export OPENAI_API_KEY=sk-xxx
-```
-
-Of voeg deze toe via Codespaces secrets.
-
-## 📱 Android
-
-Installeer de app uit de map `/app/` op je telefoon. De app roept de backend aan en laat Henk vervolgens zijn opmerkingen uitspreken.
+Dit project valt onder de MIT-licentie. Zie het [LICENSE](LICENSE) bestand voor details.
