@@ -1,33 +1,45 @@
 package com.example.travelbot
 
-object PersonaManager {
-    data class Phrase(val label: String, val text: String)
+import android.speech.tts.TextToSpeech
 
-    private val soundboard = mapOf(
-        "Jordanees" to listOf(
-            Phrase("Zeg iets meligs", "Heb je die gezien? Wat een grap, man!"),
-            Phrase("Klaag over verkeer", "Nou, het staat hier weer lekker vast."),
-            Phrase("Vraag om een broodje", "Ik lust wel een broodje kroket, jij ook?"),
-            Phrase("Geef reisadvies", "Pak gewoon de fiets, ben je zo in de stad."),
-            Phrase("Glimlach", "Kijk, zo doen we dat in Mokum!")
+/**
+ * Holds all available personas and their voice profiles.
+ */
+object PersonaManager {
+    data class VoiceProfile(
+        val pitch: Float,
+        val speechRate: Float,
+        val voiceName: String? = null
+    )
+
+    data class Persona(
+        val name: String,
+        val style: String,
+        val voice: VoiceProfile
+    )
+
+    private val personas = listOf(
+        Persona(
+            name = "Jordanees",
+            style = "Jordanees",
+            voice = VoiceProfile(pitch = 1.0f, speechRate = 1.0f)
         ),
-        "Belg" to listOf(
-            Phrase("Zeg iets meligs", "Das plezant, hé!"),
-            Phrase("Klaag over verkeer", "Amai, wat een file weer."),
-            Phrase("Vraag om een biertje", "Goeie pint hier ergens?"),
-            Phrase("Geef reisadvies", "Neem de tram, da's gemakkelijk."),
-            Phrase("Glimlach", "Schone dag vandaag!")
+        Persona(
+            name = "Belg",
+            style = "Belg",
+            voice = VoiceProfile(pitch = 1.1f, speechRate = 0.95f)
         ),
-        "Brabander" to listOf(
-            Phrase("Zeg iets meligs", "Da's kikke, toch?"),
-            Phrase("Klaag over verkeer", "Staat weer muurvast joh."),
-            Phrase("Vraag om worstenbrood", "Hebde nog un worstenbroodje?"),
-            Phrase("Geef reisadvies", "Rij nie te hard, geniet van het uitzicht."),
-            Phrase("Glimlach", "Moi hè, maak er wa van!")
+        Persona(
+            name = "Brabander",
+            style = "Brabander",
+            voice = VoiceProfile(pitch = 0.9f, speechRate = 1.05f)
         )
     )
 
-    fun getPhrases(persona: String): List<Phrase> =
-        soundboard[persona] ?: soundboard["Jordanees"]!!
-}
+    val defaultPersona: Persona
+        get() = personas.first()
 
+    fun names(): List<String> = personas.map { it.name }
+
+    fun get(name: String): Persona = personas.find { it.name == name } ?: defaultPersona
+}
