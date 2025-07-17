@@ -3,9 +3,6 @@ package com.example.travelbot
 import android.content.Context
 import android.content.SharedPreferences
 
-// Access personas for default value
-import com.example.travelbot.PersonaManager
-
 object Settings {
     private const val PREFS_NAME = "travelbot_prefs"
     private const val KEY_INTERVAL = "comment_interval"
@@ -14,7 +11,7 @@ object Settings {
 
     private const val DEFAULT_INTERVAL = 15 // minutes
     private const val DEFAULT_URL = "http://10.0.2.2:5000"
-    private val DEFAULT_PERSONALITY = PersonaManager.defaultPersona().name
+    private const val DEFAULT_PERSONALITY = PersonaManager.defaultPersona.name
 
     private fun prefs(context: Context): SharedPreferences {
         return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
