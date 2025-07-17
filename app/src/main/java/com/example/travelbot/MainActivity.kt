@@ -2,25 +2,29 @@ package com.example.travelbot
 
 import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
-import androidx.appcompat.app.AppCompatActivity
+import android.widget.ScrollView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+
+import com.example.travelbot.Logger
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var ttsManager: TtsManager
-    private lateinit var statusText: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         ttsManager = TtsManager(this)
+        Logger.attachView(findViewById(R.id.logView))
+        Logger.log("MainActivity created")
 
         requestPermissions()
 
@@ -32,23 +36,30 @@ class MainActivity : AppCompatActivity() {
         val askButton = findViewById<Button>(R.id.askButton)
         val soundButton = findViewById<Button>(R.id.soundButton)
         val settingsButton = findViewById<Button>(R.id.settingsButton)
+        val toggleButton = findViewById<Button>(R.id.toggleLogButton)
+        val logScroll = findViewById<ScrollView>(R.id.logScroll)
         val input = findViewById<EditText>(R.id.questionInput)
-        statusText = findViewById(R.id.sleepStatus)
 
-        updateStatus()
+        toggleButton.setOnClickListener {
+            if (logScroll.visibility == View.GONE) {
+                logScroll.visibility = View.VISIBLE
+                toggleButton.text = "Verberg logs"
+            } else {
+                logScroll.visibility = View.GONE
+                toggleButton.text = "Toon logs"
+            }
+        }
 
         askButton.setOnClickListener {
             val question = input.text.toString()
             val loc = LocationProvider.getLocation(this)
             if (loc != null && question.isNotBlank()) {
-                QuietMode.updateLocation(loc)
                 Thread {
+                    Logger.log("Vraag: $question")
                     val response = ApiClient.sendLocation(this, loc.latitude, loc.longitude, question)
                     if (response != null) {
-                        runOnUiThread {
-                            input.text.clear()
-                            updateStatus()
-                        }
+                        runOnUiThread { input.text.clear() }
+                        Logger.log("Antwoord: $response")
                         ttsManager.speak(response)
                     }
                 }.start()
@@ -64,19 +75,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        updateStatus()
-    }
-
-    private fun updateStatus() {
-        statusText.text = if (QuietMode.isSleeping(this)) {
-            getString(R.string.status_sleeping)
-        } else {
-            getString(R.string.status_awake)
-        }
-    }
-
     override fun onDestroy() {
         ttsManager.shutdown()
         super.onDestroy()
@@ -88,5 +86,6 @@ class MainActivity : AppCompatActivity() {
             Manifest.permission.ACCESS_COARSE_LOCATION
         )
         ActivityCompat.requestPermissions(this, perms, 0)
+        Logger.log("Permissions requested")
     }
 }
