@@ -14,10 +14,12 @@ object ApiClient {
     fun sendLocation(context: Context, lat: Double, lon: Double, question: String? = null): String? {
         val baseUrl = Settings.getBackendUrl(context)
         val url = URL("$baseUrl/comment")
+        val personaName = Settings.getPersonality(context)
+        val persona = PersonaManager.getPersona(personaName)
         val body = JSONObject().apply {
             put("lat", lat)
             put("lon", lon)
-            put("style", Settings.getPersonality(context))
+            put("style", persona.backendStyle)
             if (question != null) put("question", question)
         }.toString()
 
