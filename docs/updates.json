@@ -88,5 +88,10 @@
     "date": "2025-07-17",
     "version": "7cade51",
     "description": "Merge pull request #24 from michligtenberg2/codex/update-companionservice-commentary-timing"
+  },
+  {
+    "date": "2025-07-17",
+    "version": "6a2740c",
+    "description": "Merge branch 'main' into codex/add-soundboard-feature-to-ui"
   }
 ]
