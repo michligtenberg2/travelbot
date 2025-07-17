@@ -28,5 +28,65 @@
     "date": "2025-07-16",
     "version": "d3530be",
     "description": "Merge pull request #7 from michligtenberg2/codex/herschrijf-readme-en-update-docs"
+  },
+  {
+    "date": "2025-07-16",
+    "version": "210914d",
+    "description": "Merge pull request #8 from michligtenberg2/codex/verbeter-functionaliteit-travelbot-app"
+  },
+  {
+    "date": "2025-07-16",
+    "version": "c299f31",
+    "description": "Merge pull request #9 from michligtenberg2/codex/add-.gitignore-for-python-and-android"
+  },
+  {
+    "date": "2025-07-16",
+    "version": "5a6c9ae",
+    "description": "Merge pull request #10 from michligtenberg2/codex/update-contributing.md-for-node.js-requirement"
+  },
+  {
+    "date": "2025-07-16",
+    "version": "eb69af8",
+    "description": "Merge pull request #11 from michligtenberg2/codex/add-requirements.txt-for-python-dependencies"
+  },
+  {
+    "date": "2025-07-16",
+    "version": "591bc9e",
+    "description": "Merge pull request #12 from michligtenberg2/codex/add-check-for-openai_api_key"
+  },
+  {
+    "date": "2025-07-17",
+    "version": "9308b99",
+    "description": "Update README.md"
+  },
+  {
+    "date": "2025-07-17",
+    "version": "b0a32f3",
+    "description": "Update README-en.md"
+  },
+  {
+    "date": "2025-07-17",
+    "version": "4b2ce0d",
+    "description": "Merge pull request #15 from michligtenberg2/codex/controleer-app-op-.apk-export-gereedheid"
+  },
+  {
+    "date": "2025-07-17",
+    "version": "26284c0",
+    "description": "Merge pull request #16 from michligtenberg2/90e50z-codex/controleer-app-op-.apk-export-gereedheid"
+  },
+  {
+    "date": "2025-07-17",
+    "version": "50e9b93",
+    "description": "Merge pull request #17 from michligtenberg2/codex/add-personamanager-for-character-selection"
+  },
+  {
+    "date": "2025-07-17",
+    "version": "b3cacd7",
+    "description": "Merge pull request #22 from michligtenberg2/codex/generate-user-guide-for-travelbot-in-markdown"
+  },
+  {
+    "date": "2025-07-17",
+    "version": "7cade51",
+    "description": "Merge pull request #24 from michligtenberg2/codex/update-companionservice-commentary-timing"
   }
 ]
