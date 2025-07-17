@@ -57,6 +57,7 @@ class CompanionService : Service() {
 
     private fun fetchAndSpeak() {
         val location = LocationProvider.getLocation(this) ?: return
+        QuietMode.updateLocation(location)
 
         val municipality = getMunicipality(location)
         val distance = lastLocation?.distanceTo(location) ?: Float.MAX_VALUE
