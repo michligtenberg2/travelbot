@@ -8,12 +8,10 @@ object Settings {
     private const val KEY_INTERVAL = "comment_interval"
     private const val KEY_BACKEND_URL = "backend_url"
     private const val KEY_PERSONALITY = "personality"
-    private const val KEY_QUIET_MODE = "quiet_mode"
 
     private const val DEFAULT_INTERVAL = 15 // minutes
     private const val DEFAULT_URL = "http://10.0.2.2:5000"
-    private const val DEFAULT_PERSONALITY = "Jordanees"
-    private const val DEFAULT_QUIET_MODE = false
+    private const val DEFAULT_PERSONALITY = PersonaManager.defaultPersona.name
 
     private fun prefs(context: Context): SharedPreferences {
         return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
@@ -39,12 +37,5 @@ object Settings {
 
     fun setPersonality(context: Context, p: String) {
         prefs(context).edit().putString(KEY_PERSONALITY, p).apply()
-    }
-
-    fun isQuietModeEnabled(context: Context): Boolean =
-        prefs(context).getBoolean(KEY_QUIET_MODE, DEFAULT_QUIET_MODE)
-
-    fun setQuietModeEnabled(context: Context, enabled: Boolean) {
-        prefs(context).edit().putBoolean(KEY_QUIET_MODE, enabled).apply()
     }
 }
