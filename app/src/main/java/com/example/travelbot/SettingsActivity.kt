@@ -19,7 +19,7 @@ class SettingsActivity : AppCompatActivity() {
         val personaSpinner = findViewById<Spinner>(R.id.personaSpinner)
         val saveButton = findViewById<MaterialButton>(R.id.saveButton)
 
-        val personas = listOf("Jordanees", "Belg", "Brabander")
+        val personas = PersonaManager.getNames()
         personaSpinner.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, personas)
 
         intervalInput.setText(Settings.getInterval(this).toString())
