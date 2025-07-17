@@ -1,5 +1,8 @@
 package com.example.travelbot
 
+// Hoofdscherm van de app waar je een vraag kunt stellen aan Henk en extra
+// schermen kunt openen.
+
 import android.Manifest
 import android.content.Intent
 import android.os.Bundle
