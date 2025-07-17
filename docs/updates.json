@@ -83,5 +83,10 @@
     "date": "2025-07-17",
     "version": "b3cacd7",
     "description": "Merge pull request #22 from michligtenberg2/codex/generate-user-guide-for-travelbot-in-markdown"
+  },
+  {
+    "date": "2025-07-17",
+    "version": "7cade51",
+    "description": "Merge pull request #24 from michligtenberg2/codex/update-companionservice-commentary-timing"
   }
 ]
