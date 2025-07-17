@@ -73,5 +73,10 @@
     "date": "2025-07-17",
     "version": "26284c0",
     "description": "Merge pull request #16 from michligtenberg2/90e50z-codex/controleer-app-op-.apk-export-gereedheid"
+  },
+  {
+    "date": "2025-07-17",
+    "version": "50e9b93",
+    "description": "Merge pull request #17 from michligtenberg2/codex/add-personamanager-for-character-selection"
   }
 ]
