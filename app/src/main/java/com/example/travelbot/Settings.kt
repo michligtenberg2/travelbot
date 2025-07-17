@@ -11,7 +11,7 @@ object Settings {
 
     private const val DEFAULT_INTERVAL = 15 // minutes
     private const val DEFAULT_URL = "http://10.0.2.2:5000"
-    private const val DEFAULT_PERSONALITY = "Jordanees"
+    private const val DEFAULT_PERSONALITY = PersonaManager.defaultPersona.name
 
     private fun prefs(context: Context): SharedPreferences {
         return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
