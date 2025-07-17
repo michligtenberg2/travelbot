@@ -93,5 +93,10 @@
     "date": "2025-07-17",
     "version": "6a2740c",
     "description": "Merge branch 'main' into codex/add-soundboard-feature-to-ui"
+  },
+  {
+    "date": "2025-07-17",
+    "version": "debcb79",
+    "description": "Merge branch 'main' of https://github.com/michligtenberg2/travelbot"
   }
 ]
