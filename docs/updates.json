@@ -53,5 +53,10 @@
     "date": "2025-07-16",
     "version": "591bc9e",
     "description": "Merge pull request #12 from michligtenberg2/codex/add-check-for-openai_api_key"
+  },
+  {
+    "date": "2025-07-17",
+    "version": "9308b99",
+    "description": "Update README.md"
   }
 ]
