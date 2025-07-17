@@ -63,5 +63,10 @@
     "date": "2025-07-17",
     "version": "b0a32f3",
     "description": "Update README-en.md"
+  },
+  {
+    "date": "2025-07-17",
+    "version": "4b2ce0d",
+    "description": "Merge pull request #15 from michligtenberg2/codex/controleer-app-op-.apk-export-gereedheid"
   }
 ]
