@@ -7,6 +7,8 @@ import android.Manifest
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ScrollView
@@ -24,6 +26,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        setSupportActionBar(findViewById(R.id.toolbar))
 
         ttsManager = TtsManager(this)
         Logger.attachView(findViewById(R.id.logView))
@@ -76,6 +79,20 @@ class MainActivity : AppCompatActivity() {
         soundButton.setOnClickListener {
             startActivity(Intent(this, SoundboardActivity::class.java))
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menu_file -> Logger.log("File menu selected")
+            R.id.menu_edit -> Logger.log("Edit menu selected")
+            R.id.menu_help -> Logger.log("Help menu selected")
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onDestroy() {
