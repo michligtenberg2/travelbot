@@ -8,8 +8,14 @@ JSON teruggestuurd naar de telefoon zodat Text-to-Speech het kan voorlezen.
 from flask import Flask, request, jsonify
 import requests
 import os
+from flasgger import Swagger
+from flask_cors import CORS
+import asyncio
+import httpx
 
 app = Flask(__name__)
+CORS(app)  # Voeg CORS-ondersteuning toe
+Swagger(app)  # Voeg Swagger-documentatie toe
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 if not OPENAI_API_KEY:
@@ -17,36 +23,82 @@ if not OPENAI_API_KEY:
 
 @app.route('/comment', methods=['POST'])
 def comment():
-    """Endpoint dat een opmerking over de huidige locatie retourneert."""
+    """Endpoint dat een opmerking over de huidige locatie retourneert.
+    ---
+    parameters:
+      - name: lat
+        in: body
+        type: number
+        required: true
+        description: Latitude van de locatie.
+      - name: lon
+        in: body
+        type: number
+        required: true
+        description: Longitude van de locatie.
+      - name: question
+        in: body
+        type: string
+        required: false
+        description: Optionele vraag om mee te sturen.
+      - name: style
+        in: body
+        type: string
+        required: false
+        description: Stijl van de opmerking (bijv. 'Jordanees').
+    responses:
+      200:
+        description: Een opmerking over de locatie.
+        schema:
+          type: object
+          properties:
+            text:
+              type: string
+              description: De gegenereerde opmerking.
+    """
     data = request.get_json()
     lat = data.get('lat')
     lon = data.get('lon')
     question = data.get('question')
     style = data.get('style', 'Jordanees')
 
-    place_summary = get_wikipedia_summary(lat, lon)
+    if not lat or not lon:
+        return jsonify(error="Latitude en longitude zijn verplicht."), 400
+
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    place_summary = loop.run_until_complete(get_wikipedia_summary(lat, lon))
     prompt = build_prompt(place_summary, question, style)
     response_text = query_openai(prompt)
 
     return jsonify(text=response_text)
 
-def get_wikipedia_summary(lat, lon):
+async def get_wikipedia_summary(lat, lon):
     """Geef een korte samenvatting van de plek op basis van Wikipedia."""
     try:
         geo_url = f"https://en.wikipedia.org/w/api.php?action=query&list=geosearch&gscoord={lat}%7C{lon}&gsradius=10000&gslimit=1&format=json"
-        geo_resp = requests.get(geo_url).json()
-        pages = geo_resp.get("query", {}).get("geosearch", [])
-        if not pages:
-            return "Er is hier niet veel bijzonders."
+        async with httpx.AsyncClient() as client:
+            geo_resp = await client.get(geo_url)
+            geo_resp.raise_for_status()  # Controleer op HTTP-fouten
+            geo_data = geo_resp.json()
+            pages = geo_data.get("query", {}).get("geosearch", [])
+            if not pages:
+                return "Er is hier niet veel bijzonders."
 
-        title = pages[0]["title"]
-        summary_url = f"https://en.wikipedia.org/api/rest_v1/page/summary/{title}"
-        summary_resp = requests.get(summary_url).json()
-        return summary_resp.get("extract", f"Iets over {title}.")
+            title = pages[0]["title"]
+            summary_url = f"https://en.wikipedia.org/api/rest_v1/page/summary/{title}"
+            summary_resp = await client.get(summary_url)
+            summary_resp.raise_for_status()  # Controleer op HTTP-fouten
+            summary_data = summary_resp.json()
+            return summary_data.get("extract", f"Iets over {title}.")
+    except httpx.RequestError as e:
+        app.logger.error(f"HTTP-fout bij het ophalen van Wikipedia-gegevens: {e}")
+        return "Kon geen informatie ophalen vanwege een netwerkfout."
     except Exception as e:
-        return "Kon geen informatie ophalen."
+        app.logger.error(f"Onverwachte fout: {e}")
+        return "Er is een onverwachte fout opgetreden bij het ophalen van informatie."
 
-def build_prompt(summary, question=None, style='Jordanees'):
+def build_prompt(summary, question=None, style='Jordanees', language='nl'):
     """Stel een prompt samen voor het taalmodel."""
     if style == 'Belg':
         persona = 'Je bent Henk, een vrolijke Belg uit Antwerpen met een zachte G.'
@@ -63,9 +115,14 @@ Samenvatting van de plek:
 
 """
     if question:
-        return base + f"Iemand vraagt je: '{question}'. Wat zeg je?"
+        base += f"Iemand vraagt je: '{question}'. Wat zeg je?"
     else:
-        return base + "Geef één humoristische zin over deze plek."
+        base += "Geef één humoristische zin over deze plek."
+
+    if language == 'en':
+        base = base.replace('Je', 'You').replace('praat', 'talk').replace('grappige opmerking', 'funny remark')
+
+    return base
 
 def query_openai(prompt):
     """Stuur de prompt naar OpenAI en geef het antwoord terug."""
