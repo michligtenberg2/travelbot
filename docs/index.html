@@ -1,62 +1,70 @@
 <!DOCTYPE html>
-<html lang="nl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Travelbot Documentatie</title>
+    <title>TravelBot - Your Personal Travel Companion</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <nav>
-            <a href="index.html">Nederlands</a> | <a href="index_en.html">English</a>
-        </nav>
-        <h1>📡 Travelbot – Jouw AI-reisgenoot</h1>
-        <p>Versie: <span id="current-version">v0.1</span></p>
+    <!-- Hero Section -->
+    <header class="bg-primary text-white text-center py-5">
+        <div class="container">
+            <h1>Welcome to TravelBot</h1>
+            <p class="lead">Your personal travel companion with dynamic personas and offline support.</p>
+            <a href="#features" class="btn btn-light btn-lg">Explore Features</a>
+        </div>
     </header>
 
-    <main>
-        <section>
-            <h2>🔧 Wat is Travelbot?</h2>
-            <p>
-                Travelbot is een AI-reisgenoot voor in de auto. Hij praat elke ~15 minuten met een Amsterdams accent over je omgeving,
-                gebaseerd op GPS-gegevens, Wikipedia en een taalmodel. Hij draait op een oude Android-telefoon.
-            </p>
-        </section>
+    <!-- Features Section -->
+    <section id="features" class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-4">Features</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <h3>Dynamic Personas</h3>
+                    <p>Create and manage unique personas to enhance your travel experience.</p>
+                </div>
+                <div class="col-md-4">
+                    <h3>Offline Support</h3>
+                    <p>Access your favorite personas even without an internet connection.</p>
+                </div>
+                <div class="col-md-4">
+                    <h3>Custom Persona Creator</h3>
+                    <p>Design your own personas with ease and personalize your journeys.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-        <section>
-            <h2>🚀 Installatie</h2>
-            <ol>
-                <li>Installeer Python 3.11+ en een Android-telefoon met Android 8+.</li>
-                <li>Kloon de repository en installeer de vereisten:</li>
-                <pre><code>git clone https://github.com/michligtenberg2/travelbot.git
-cd travelbot
-pip install -r backend/requirements.txt</code></pre>
-                <li>Stel je OpenAI API-sleutel in:</li>
-                <pre><code>export OPENAI_API_KEY=sk-xxx</code></pre>
-                <li>Start de backend:</li>
-                <pre><code>python backend/app.py</code></pre>
-                <li>Open de map <code>app/</code> in Android Studio, bouw de app en installeer de APK op je telefoon.</li>
-                <li>Vul in de app het adres van je backend in en je bent klaar!</li>
-            </ol>
-        </section>
+    <!-- Screenshots Section -->
+    <section id="screenshots" class="bg-light py-5">
+        <div class="container">
+            <h2 class="text-center mb-4">App Screenshots</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <img src="screenshots/persona_selector.png" alt="Persona Selector" class="img-fluid rounded">
+                </div>
+                <div class="col-md-4">
+                    <img src="screenshots/custom_persona_creator.png" alt="Custom Persona Creator" class="img-fluid rounded">
+                </div>
+                <div class="col-md-4">
+                    <img src="screenshots/offline_support.png" alt="Offline Support" class="img-fluid rounded">
+                </div>
+            </div>
+        </div>
+    </section>
 
-        <section>
-            <h2>📚 Veelgestelde vragen</h2>
-            <p><strong>Werkt het offline?</strong> Nee, internet is vereist voor OpenAI en Wikipedia.</p>
-            <p><strong>Hoe verander ik de backend-URL?</strong> Ga naar de instellingenpagina in de app.</p>
-        </section>
+    <!-- Download Section -->
+    <section id="download" class="py-5">
+        <div class="container text-center">
+            <h2>Download TravelBot</h2>
+            <p class="lead">Get the app now and start your journey!</p>
+            <a href="#" class="btn btn-primary btn-lg">Download for Android</a>
+        </div>
+    </section>
 
-        <section>
-            <h2>📜 Updategeschiedenis</h2>
-            <ul id="update-log">
-                <li>Versie 0.1: Eerste release met basisfunctionaliteit.</li>
-            </ul>
-        </section>
-    </main>
-
-    <footer>
-        <p>Travelbot is een project van <strong>mich ligtenberg</strong> – 2025</p>
-    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
