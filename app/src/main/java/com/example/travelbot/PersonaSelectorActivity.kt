@@ -40,6 +40,10 @@ class PersonaSelectorActivity : AppCompatActivity() {
         personaRecyclerView.layoutManager = LinearLayoutManager(this)
         personaRecyclerView.adapter = personaAdapter
 
+        // Show loading indicator while fetching personas
+        val loadingIndicator = findViewById<ProgressBar>(R.id.loadingIndicator)
+        loadingIndicator.visibility = View.VISIBLE
+
         // Fetch personas from backend
         fetchPersonas()
 
@@ -120,8 +124,10 @@ class PersonaSelectorActivity : AppCompatActivity() {
                     personaNames.add(persona.getString("name"))
                 }
 
+                // Hide loading indicator after data is loaded
                 runOnUiThread {
                     personaAdapter.updateData(personaNames)
+                    findViewById<ProgressBar>(R.id.loadingIndicator).visibility = View.GONE
                 }
             } catch (e: Exception) {
                 runOnUiThread {
