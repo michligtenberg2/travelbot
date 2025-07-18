@@ -1,66 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:padding="16dp"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fillViewport="true">
 
-    <com.google.android.material.textfield.TextInputLayout
+    <LinearLayout
+        android:orientation="vertical"
+        android:padding="24dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Commentaar-interval (min)">
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/intervalInput"
-            android:inputType="number"
+        android:layout_height="wrap_content">
+
+        <!-- Header -->
+        <com.google.android.material.textview.MaterialTextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_height="wrap_content"
+            android:text="Travelbot Instellingen"
+            android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium"
+            android:layout_marginBottom="24dp" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Backend URL"
-        android:layout_marginTop="16dp">
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/urlInput"
+        <!-- Comment Interval -->
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_height="wrap_content"
+            android:hint="Commentaar-interval (minuten)"
+            app:helperText="Hoe vaak Heino een opmerking maakt"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/intervalInput"
+                android:inputType="number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <Spinner
-        android:id="@+id/personaSpinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp" />
+        <!-- Backend URL -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Backend URL"
+            app:helperText="Server adres voor de AI service"
+            android:layout_marginTop="16dp"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/urlInput"
+                android:inputType="textUri"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <Switch
-        android:id="@+id/quietSwitch"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/quiet_mode"
-        android:layout_marginTop="16dp" />
+        <!-- API Key -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="API Sleutel"
+            app:helperText="Optionele API sleutel voor authenticatie"
+            app:endIconMode="password_toggle"
+            android:layout_marginTop="16dp"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/apiKeyInput"
+                android:inputType="textPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/saveButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="Opslaan" />
+        <!-- Persona Selection -->
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Persoonlijkheid"
+            android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="8dp" />
 
-    <EditText
-        android:id="@+id/backendUrlField"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Backend URL"
-        android:inputType="textUri"
-        android:layout_marginTop="16dp"/>
+        <Spinner
+            android:id="@+id/personaSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/material_spinner_background"
+            android:padding="12dp" />
 
-    <Button
-        android:id="@+id/saveButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Save"
-        android:layout_marginTop="8dp"/>
+        <!-- Quiet Mode Switch -->
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/quietSwitch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Stille modus"
+            android:layout_marginTop="24dp"
+            android:textAppearance="@style/TextAppearance.Material3.BodyLarge" />
 
-</LinearLayout>
+        <!-- Actions -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="32dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/clearCacheButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Cache Wissen"
+                android:layout_marginEnd="8dp"
+                style="@style/Widget.Material3.Button.OutlinedButton" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/saveButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Opslaan"
+                android:layout_marginStart="8dp" />
+
+        </LinearLayout>
+
+        <!-- Loading indicator -->
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/loadingIndicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:visibility="gone"
+            app:indicatorColor="?attr/colorPrimary" />
+
+    </LinearLayout>
+
+</ScrollView>
