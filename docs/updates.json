@@ -118,5 +118,10 @@
     "date": "2025-07-17",
     "version": "f3cb4d1",
     "description": "Merge branch 'main' into codex/add-caching-to-apiclient-in-kotlin"
+  },
+  {
+    "date": "2025-07-18",
+    "version": "a0efc21",
+    "description": "bug fixes"
   }
 ]
