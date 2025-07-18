@@ -5,6 +5,7 @@ package com.example.travelbot
 
 import android.Manifest
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -27,6 +28,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        disableAnimationsForLowEndDevices()
         setContentView(R.layout.activity_main)
 
         ttsManager = TtsManager(this)
@@ -111,5 +113,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun generateCommentary() {
         // Implementatie voor het genereren van commentaar
+    }
+
+    private fun disableAnimationsForLowEndDevices() {
+        val isLowEndDevice = Build.VERSION.SDK_INT <= Build.VERSION_CODES.M // Android 6.0 of lager
+        if (isLowEndDevice) {
+            window.setWindowAnimations(0)
+        }
     }
 }
