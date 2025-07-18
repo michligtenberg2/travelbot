@@ -42,12 +42,6 @@ ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "root")
 # Generate a secure token for admin access
 ADMIN_TOKEN = secrets.token_hex(16)
 
-# Define admin credentials
-ADMIN_CREDENTIALS = {
-    "username": "admin",
-    "password": "securepassword123"
-}
-
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
@@ -62,7 +56,7 @@ def admin_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         auth = request.authorization
-        if auth and auth.username == ADMIN_CREDENTIALS["username"] and auth.password == ADMIN_CREDENTIALS["password"]:
+        if auth and auth.username == ADMIN_USERNAME and auth.password == ADMIN_PASSWORD:
             return f(*args, **kwargs)
         return jsonify({"error": "Unauthorized access"}), 401
     return decorated_function

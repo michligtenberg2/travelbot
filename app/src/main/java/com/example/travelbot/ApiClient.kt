@@ -13,6 +13,7 @@ import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
 import kotlin.math.roundToInt
+import com.example.travelbot.data.LocationCacheRepository
 
 /**
  * ApiClient is verantwoordelijk voor het communiceren met de backend API.
@@ -24,8 +25,19 @@ object ApiClient {
     private const val KEY_BACKEND_URL = "backend_url"
     private const val DEFAULT_BACKEND_URL = "http://10.0.2.2:5000"
 
+    private var cacheRepository: LocationCacheRepository? = null
+
     /**
-     * Haalt de SharedPreferences op voor caching.
+     * Initializes the cache repository
+     */
+    private fun initCacheRepository(context: Context) {
+        if (cacheRepository == null) {
+            cacheRepository = LocationCacheRepository(context)
+        }
+    }
+
+    /**
+     * Haalt de SharedPreferences op voor legacy caching support.
      *
      * @param context De context van de applicatie.
      * @return SharedPreferences object voor caching.
@@ -51,9 +63,10 @@ object ApiClient {
      *
      * @param url De URL van de backend.
      * @param body De JSON-string die moet worden verzonden.
+     * @param context De context van de applicatie.
      * @return De JSON-string van de serverrespons.
      */
-    private suspend fun postRequest(url: URL, body: String): String {
+    private suspend fun postRequest(url: URL, body: String, context: Context): String {
         return withContext(Dispatchers.IO) {
             val conn = url.openConnection() as HttpURLConnection
             conn.requestMethod = "POST"
@@ -80,6 +93,7 @@ object ApiClient {
     /**
      * Verzendt locatiegegevens naar de backend en haalt een reactie op.
      * Deze functie is asynchroon gemaakt om de hoofdthread niet te blokkeren.
+     * Gebruikt Room database voor geavanceerd caching.
      *
      * @param context De context van de applicatie.
      * @param lat Latitude van de locatie.
@@ -88,30 +102,52 @@ object ApiClient {
      * @return De reactie van de backend als string, of null bij een fout.
      */
     suspend fun sendLocationAsync(context: Context, lat: Double, lon: Double, question: String? = null): String? {
+        initCacheRepository(context)
+        
         val baseUrl = Settings.getBackendUrl(context)
         val url = URL("$baseUrl/comment")
-        val key = cacheKey(lat, lon)
+        val personality = Settings.getPersonality(context)
         val body = JSONObject().apply {
             put("lat", lat)
             put("lon", lon)
-            put("style", Settings.getPersonality(context))
+            put("style", personality)
             if (question != null) put("question", question)
         }.toString()
 
         return try {
-            val response = postRequest(url, body)
+            // Try to get from Room cache first
+            val cachedResponse = cacheRepository?.getCachedResponse(lat, lon, personality)
+            if (cachedResponse != null) {
+                Log.d(TAG, "Using Room cache for location ${cacheKey(lat, lon)}")
+                return cachedResponse
+            }
+
+            // If not in Room cache, make API call
+            val response = postRequest(url, body, context)
             val json = JSONObject(response)
             val text = json.optString("text")
-            cachePrefs(context).edit().putString(key, text).apply()
+            
+            // Save to Room cache
+            cacheRepository?.saveLocationResponse(lat, lon, text, personality)
             text
         } catch (e: IOException) {
             Log.e(TAG, "Netwerkfout: ${e.message}", e)
-            val cached = cachePrefs(context).getString(key, null)
-            if (cached != null) {
-                Log.d(TAG, "Gebruik cache voor locatie $key")
-                cached
+            
+            // Try Room cache as fallback
+            val cachedResponse = cacheRepository?.getCachedResponse(lat, lon, personality)
+            if (cachedResponse != null) {
+                Log.d(TAG, "Using Room cache fallback for location ${cacheKey(lat, lon)}")
+                cachedResponse
             } else {
-                "Kon geen verbinding maken met de server. Controleer je internetverbinding."
+                // Fall back to legacy SharedPreferences cache
+                val key = cacheKey(lat, lon)
+                val legacyCached = cachePrefs(context).getString(key, null)
+                if (legacyCached != null) {
+                    Log.d(TAG, "Using legacy cache for location $key")
+                    legacyCached
+                } else {
+                    "Kon geen verbinding maken met de server. Controleer je internetverbinding."
+                }
             }
         } catch (e: Exception) {
             Log.e(TAG, "Onverwachte fout: ${e.message}", e)
@@ -132,6 +168,31 @@ object ApiClient {
     }
 
     /**
+     * Clears the cache (both Room and legacy)
+     * 
+     * @param context De context van de applicatie.
+     */
+    suspend fun clearCache(context: Context) {
+        initCacheRepository(context)
+        cacheRepository?.clearCache()
+        
+        // Also clear legacy SharedPreferences cache
+        cachePrefs(context).edit().clear().apply()
+        Log.d(TAG, "Cache cleared")
+    }
+
+    /**
+     * Cleanup old cache entries
+     * 
+     * @param context De context van de applicatie.
+     */
+    suspend fun cleanupCache(context: Context) {
+        initCacheRepository(context)
+        cacheRepository?.cleanupOldEntries()
+        Log.d(TAG, "Old cache entries cleaned up")
+    }
+
+    /**
      * Haalt gegevens op van de backend.
      * Dit is een algemene functie die kan worden gebruikt om verschillende eindpunten te benaderen.
      *
@@ -146,6 +207,10 @@ object ApiClient {
             try {
                 val connection = URL(url).openConnection() as HttpURLConnection
                 connection.requestMethod = "GET"
+                val apiKey = Settings.getApiKey(context)
+                if (apiKey.isNotEmpty()) {
+                    connection.setRequestProperty("X-API-KEY", apiKey)
+                }
 
                 val responseCode = connection.responseCode
                 if (responseCode == HttpURLConnection.HTTP_OK) {
