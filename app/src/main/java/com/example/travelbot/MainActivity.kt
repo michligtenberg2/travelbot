@@ -6,6 +6,8 @@ package com.example.travelbot
 import android.Manifest
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -20,6 +22,8 @@ import com.example.travelbot.Logger
 class MainActivity : AppCompatActivity() {
 
     private lateinit var ttsManager: TtsManager
+
+    private val COMMENT_INTERVAL = 30 * 60 * 1000L // 30 minuten in milliseconden
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,6 +80,8 @@ class MainActivity : AppCompatActivity() {
         soundButton.setOnClickListener {
             startActivity(Intent(this, SoundboardActivity::class.java))
         }
+
+        scheduleCommentary()
     }
 
     override fun onDestroy() {
@@ -90,5 +96,20 @@ class MainActivity : AppCompatActivity() {
         )
         ActivityCompat.requestPermissions(this, perms, 0)
         Logger.log("Permissions requested")
+    }
+
+    private fun scheduleCommentary() {
+        val handler = Handler(Looper.getMainLooper())
+        val runnable = object : Runnable {
+            override fun run() {
+                generateCommentary()
+                handler.postDelayed(this, COMMENT_INTERVAL)
+            }
+        }
+        handler.post(runnable)
+    }
+
+    private fun generateCommentary() {
+        // Implementatie voor het genereren van commentaar
     }
 }
