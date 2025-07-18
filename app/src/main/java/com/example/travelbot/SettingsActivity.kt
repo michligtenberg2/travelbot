@@ -2,6 +2,7 @@ package com.example.travelbot
 
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Patterns
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
@@ -52,7 +53,7 @@ class SettingsActivity : AppCompatActivity() {
             Settings.setQuietModeEnabled(this, quietSwitch.isChecked)
 
             val newUrl = backendUrlInput.text.toString()
-            if (newUrl.isNotEmpty()) {
+            if (newUrl.isNotEmpty() && Patterns.WEB_URL.matcher(newUrl).matches()) {
                 sharedPreferences.edit().putString("backend_url", newUrl).apply()
                 Toast.makeText(this, "Backend URL saved!", Toast.LENGTH_SHORT).show()
             } else {

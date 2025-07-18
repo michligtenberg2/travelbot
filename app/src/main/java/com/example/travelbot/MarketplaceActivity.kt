@@ -1,6 +1,7 @@
 package com.example.travelbot
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.ListView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -10,6 +11,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
+import java.net.HttpURLConnection
+import java.net.URL
 
 class MarketplaceActivity : AppCompatActivity() {
 
@@ -50,6 +53,22 @@ class MarketplaceActivity : AppCompatActivity() {
             } catch (e: Exception) {
                 null
             }
+        }
+    }
+
+    private fun loadMarketplace() {
+        try {
+            // ...existing code...
+            val response = apiClient.getMarketplaceItems()
+            if (response.isSuccessful) {
+                // ...existing code...
+            } else {
+                Log.e("MarketplaceActivity", "Failed to load marketplace: ${response.errorBody()?.string()}")
+                Toast.makeText(this, "Failed to load marketplace", Toast.LENGTH_SHORT).show()
+            }
+        } catch (e: Exception) {
+            Log.e("MarketplaceActivity", "Error loading marketplace", e)
+            Toast.makeText(this, "An error occurred while loading the marketplace", Toast.LENGTH_SHORT).show()
         }
     }
 }

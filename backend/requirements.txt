@@ -3,3 +3,5 @@ requests
 flasgger
 flask_cors
 httpx
+python-dotenv
+flask-caching

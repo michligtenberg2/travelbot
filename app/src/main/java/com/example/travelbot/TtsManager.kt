@@ -2,6 +2,8 @@ package com.example.travelbot
 
 import android.content.Context
 import android.speech.tts.TextToSpeech
+import android.util.Log
+import android.widget.Toast
 import java.util.Locale
 
 /**
@@ -32,7 +34,12 @@ class TtsManager(private val ctx: Context) : TextToSpeech.OnInitListener {
      */
     fun speak(text: String) {
         if (QuietMode.isSleeping(ctx)) return // Controleer of QuietMode actief is.
-        tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "heino")
+
+        val result = tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "heino")
+        if (result == TextToSpeech.ERROR) {
+            Log.e("TtsManager", "Error occurred while speaking")
+            Toast.makeText(ctx, "Error occurred while speaking", Toast.LENGTH_SHORT).show()
+        }
     }
 
     /**
