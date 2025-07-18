@@ -17,6 +17,7 @@ import logging
 import json
 from dotenv import load_dotenv
 from flask_caching import Cache
+import secrets
 
 # Load environment variables from .env file
 load_dotenv()
@@ -32,11 +33,12 @@ if not OPENAI_API_KEY:
 
 app.secret_key = os.getenv("SECRET_KEY", "default_secret_key")  # Set a secret key for session management
 
-# Hardcoded admin credentials
-ADMIN_CREDENTIALS = {
-    "username": "admin",
-    "password": "root"
-}
+# Load admin credentials from environment variables
+ADMIN_USERNAME = os.getenv("ADMIN_USERNAME", "admin")
+ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "root")
+
+# Generate a secure token for admin access
+ADMIN_TOKEN = secrets.token_hex(16)
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -244,9 +246,9 @@ def login():
         description: Invalid credentials
     """
     data = request.json
-    if data.get("username") == ADMIN_CREDENTIALS["username"] and data.get("password") == ADMIN_CREDENTIALS["password"]:
+    if data.get("username") == ADMIN_USERNAME and data.get("password") == ADMIN_PASSWORD:
         session["logged_in"] = True
-        return jsonify({"message": "Login successful"})
+        return jsonify({"message": "Login successful", "token": ADMIN_TOKEN}), 200
     return jsonify({"error": "Invalid credentials"}), 401
 
 @app.route('/logout', methods=['POST'])
@@ -266,10 +268,24 @@ def logout():
 def protected_endpoint():
     return jsonify({"message": "You have access to this endpoint"})
 
+@app.route('/admin-login', methods=['POST'])
+def admin_login():
+    data = request.json
+    username = data.get('username')
+    password = data.get('password')
+
+    if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
+        return jsonify({"token": ADMIN_TOKEN}), 200
+    else:
+        return jsonify({"error": "Invalid credentials"}), 401
+
 @app.route('/admin-access', methods=['GET'])
-@admin_required
 def admin_access():
-    return jsonify({"message": "Admin access granted", "api_key": "<YOUR_ADMIN_API_KEY>"})
+    token = request.headers.get('Authorization')
+    if token == f"Bearer {ADMIN_TOKEN}":
+        return jsonify({"message": "Admin access granted"}), 200
+    else:
+        return jsonify({"error": "Unauthorized"}), 403
 
 @app.route('/personas', methods=['GET'])
 @cache.cached(timeout=300)
@@ -377,6 +393,18 @@ def get_commits():
         return jsonify(commit_data), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+@app.route('/marketplace', methods=['GET'])
+def marketplace():
+    """Endpoint to list all available personas in the marketplace."""
+    marketplace_dir = os.path.join(os.path.dirname(__file__), 'marketplace')
+    personas = []
+    for filename in os.listdir(marketplace_dir):
+        if filename.endswith('.json'):
+            with open(os.path.join(marketplace_dir, filename), 'r') as f:
+                persona = json.load(f)
+                personas.append({"name": persona["name"], "description": persona["description"]})
+    return jsonify(personas)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
