@@ -183,5 +183,10 @@
     "date": "2025-07-18",
     "version": "833f052",
     "description": "Implemented dynamic backend URL configuration, added caching with Room and Flask-Caching, and set up database structure for personas."
+  },
+  {
+    "date": "2025-07-18",
+    "version": "4cb21a4",
+    "description": "Merge branch 'main' of https://github.com/michligtenberg2/travelbot"
   }
 ]
