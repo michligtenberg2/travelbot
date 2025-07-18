@@ -5,9 +5,14 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [Persona::class], version = 1)
+@Database(
+    entities = [Persona::class, LocationCache::class], 
+    version = 2,
+    exportSchema = false
+)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun personaDao(): PersonaDao
+    abstract fun locationCacheDao(): LocationCacheDao
 
     companion object {
         @Volatile private var instance: AppDatabase? = null
@@ -17,7 +22,8 @@ abstract class AppDatabase : RoomDatabase() {
                 instance ?: Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java, "travelbot.db"
-                ).build().also { instance = it }
+                ).fallbackToDestructiveMigration() // For demo purposes, in production use proper migrations
+                .build().also { instance = it }
             }
     }
 }
