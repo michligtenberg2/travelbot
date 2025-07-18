@@ -37,7 +37,7 @@ Lees dit document in het Engels via [README-en.md](README-en.md).
 
 ## 🎬 Voorbeeldgebruik
 
-Onderstaande afbeelding toont een voorbeeld van Henk's reactie en hoe de onderdelen samenhangen.
+Onderstaande afbeelding toont een voorbeeld van Heino's reactie en hoe de onderdelen samenhangen.
 
 
 

@@ -32,7 +32,7 @@ class TtsManager(private val ctx: Context) : TextToSpeech.OnInitListener {
      */
     fun speak(text: String) {
         if (QuietMode.isSleeping(ctx)) return // Controleer of QuietMode actief is.
-        tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "henk")
+        tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "heino")
     }
 
     /**

@@ -37,7 +37,7 @@ This file is the English counterpart of the Dutch [README.md](README.md).
 
 ## 🎬 Example usage
 
-Below you see an example response from Henk and how the pieces fit together.
+Below you see an example response from Heino and how the pieces fit together.
 
 
 
