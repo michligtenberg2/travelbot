@@ -1,6 +1,7 @@
 package com.example.travelbot
 
 import android.content.Context
+import android.net.ConnectivityManager
 import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.widget.Toast
@@ -15,6 +16,12 @@ import java.util.Locale
 class TtsManager(private val ctx: Context) : TextToSpeech.OnInitListener {
 
     private var tts: TextToSpeech = TextToSpeech(ctx, this)
+
+    private val offlineComments = listOf(
+        "Welkom bij Travelbot!",
+        "Wist je dat Amsterdam meer fietsen heeft dan inwoners?",
+        "De Eiffeltoren wordt elke zeven jaar opnieuw geverfd."
+    )
 
     /**
      * Callback die wordt aangeroepen wanneer de TTS-engine is geïnitialiseerd.
@@ -47,5 +54,19 @@ class TtsManager(private val ctx: Context) : TextToSpeech.OnInitListener {
      */
     fun shutdown() {
         tts.shutdown()
+    }
+
+    fun getComment(): String {
+        return if (isNetworkAvailable()) {
+            fetchCommentFromServer() ?: offlineComments.random()
+        } else {
+            offlineComments.random()
+        }
+    }
+
+    private fun isNetworkAvailable(): Boolean {
+        val connectivityManager = ctx.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetwork = connectivityManager.activeNetworkInfo
+        return activeNetwork != null && activeNetwork.isConnected
     }
 }
