@@ -7,11 +7,22 @@ import android.location.Location
 import android.location.LocationManager
 import androidx.core.app.ActivityCompat
 
+/**
+ * LocationProvider is verantwoordelijk voor het ophalen van de huidige locatie van de gebruiker.
+ * Het controleert permissies en gebruikt beschikbare providers om de meest nauwkeurige locatie te bepalen.
+ */
 object LocationProvider {
 
+    /**
+     * Haalt de huidige locatie van de gebruiker op.
+     *
+     * @param context De context van de applicatie.
+     * @return De meest nauwkeurige beschikbare locatie, of null als geen locatie beschikbaar is.
+     */
     fun getLocation(context: Context): Location? {
         val manager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
+        // Controleer of de vereiste permissies zijn verleend.
         val hasFine = ActivityCompat.checkSelfPermission(
             context,
             Manifest.permission.ACCESS_FINE_LOCATION
