@@ -57,6 +57,7 @@ app.config['CACHE_TYPE'] = 'SimpleCache'  # Use SimpleCache for development
 app.config['CACHE_DEFAULT_TIMEOUT'] = 300  # Cache timeout in seconds
 cache = Cache(app)
 
+
 def admin_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -66,6 +67,7 @@ def admin_required(f):
         return jsonify({"error": "Unauthorized access"}), 401
     return decorated_function
 
+
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -73,6 +75,7 @@ def login_required(f):
             return jsonify({"error": "Unauthorized access"}), 401
         return f(*args, **kwargs)
     return decorated_function
+
 
 @app.before_request
 def validate_api_key():
@@ -86,6 +89,7 @@ def validate_api_key():
     # Example: if len(user_api_key) != 32:
     #             logger.error("Invalid API key format")
     #             return jsonify({"error": "Invalid API key format"}), 401
+
 
 @app.route('/comment', methods=['POST'])
 def comment():
@@ -139,6 +143,7 @@ def comment():
 
     return jsonify(text=response_text)
 
+
 async def get_wikipedia_summary(lat, lon):
     """Geef een korte samenvatting van de plek op basis van Wikipedia."""
     try:
@@ -163,6 +168,7 @@ async def get_wikipedia_summary(lat, lon):
     except Exception as e:
         app.logger.error(f"Onverwachte fout: {e}")
         return "Er is een onverwachte fout opgetreden bij het ophalen van informatie."
+
 
 def build_prompt(summary, question=None, style='Jordanees', language='nl'):
     """Stel een prompt samen voor het taalmodel."""
@@ -211,6 +217,7 @@ Samenvatting van de plek:
 
     return base
 
+
 def query_openai(prompt):
     """Stuur de prompt naar OpenAI en geef het antwoord terug."""
     try:
@@ -232,6 +239,7 @@ def query_openai(prompt):
         return result["choices"][0]["message"]["content"]
     except Exception as e:
         return "Ik weet effe niks zinnigs te zeggen, maat."
+
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -261,6 +269,7 @@ def login():
         return jsonify({"message": "Login successful", "token": ADMIN_TOKEN}), 200
     return jsonify({"error": "Invalid credentials"}), 401
 
+
 @app.route('/logout', methods=['POST'])
 def logout():
     """
@@ -273,10 +282,12 @@ def logout():
     session.pop("logged_in", None)
     return jsonify({"message": "Logged out successfully"})
 
+
 @app.route('/protected-endpoint', methods=['GET'])
 @login_required
 def protected_endpoint():
     return jsonify({"message": "You have access to this endpoint"})
+
 
 @app.route('/admin-login', methods=['POST'])
 def admin_login():
@@ -289,6 +300,7 @@ def admin_login():
     else:
         return jsonify({"error": "Invalid credentials"}), 401
 
+
 @app.route('/admin-access', methods=['GET'])
 def admin_access():
     token = request.headers.get('Authorization')
@@ -296,6 +308,7 @@ def admin_access():
         return jsonify({"message": "Admin access granted"}), 200
     else:
         return jsonify({"error": "Unauthorized"}), 403
+
 
 @app.route('/personas', methods=['GET'])
 @cache.cached(timeout=300)
@@ -310,6 +323,7 @@ def get_personas():
                 personas.append({"name": persona["name"], "description": persona["description"]})
     return jsonify(personas)
 
+
 @app.route('/load-persona/<persona_name>', methods=['GET'])
 def load_persona(persona_name):
     """Endpoint to load a specific persona."""
@@ -320,6 +334,7 @@ def load_persona(persona_name):
             persona = json.load(f)
         return jsonify(persona)
     return jsonify({"error": "Persona not found"}), 404
+
 
 @app.route('/upload-persona', methods=['POST'])
 def upload_persona():
@@ -354,6 +369,7 @@ def upload_persona():
         return jsonify({'message': 'Persona uploaded successfully'}), 200
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
 
 @app.route('/commits', methods=['GET'])
 def get_commits():
@@ -404,6 +420,7 @@ def get_commits():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+
 @app.route('/marketplace', methods=['GET'])
 @cache.cached()
 def marketplace():
@@ -416,6 +433,7 @@ def marketplace():
                 persona = json.load(f)
                 personas.append({"name": persona["name"], "description": persona.get("description", "")})
     return jsonify(personas)
+
 
 @app.route('/async_marketplace', methods=['GET'])
 async def async_marketplace():
@@ -437,9 +455,11 @@ async def async_marketplace():
 
     return jsonify(personas)
 
+
 def compress_image(input_path, output_path, quality=85):
     with Image.open(input_path) as img:
         img.save(output_path, "JPEG", optimize=True, quality=quality)
+
 
 @app.route('/compress/<filename>', methods=['GET'])
 @cache.cached(timeout=3600, query_string=True)
@@ -451,6 +471,7 @@ def serve_compressed_image(filename):
         compress_image(input_path, output_path)
 
     return send_from_directory('static/compressed', filename)
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
