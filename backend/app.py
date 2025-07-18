@@ -319,5 +319,54 @@ def upload_persona():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+@app.route('/commits', methods=['GET'])
+def get_commits():
+    """Endpoint to fetch the latest commits from the GitHub repository.
+    ---
+    responses:
+      200:
+        description: A list of latest commits
+        schema:
+          type: array
+          items:
+            type: object
+            properties:
+              message:
+                type: string
+                description: The commit message.
+              author:
+                type: string
+                description: The name of the author.
+              date:
+                type: string
+                format: date-time
+                description: The date of the commit.
+    """
+    try:
+        # Replace with your GitHub repository details
+        repo_owner = "michligtenberg2"
+        repo_name = "travelbot"
+        url = f"https://api.github.com/repos/{repo_owner}/{repo_name}/commits"
+
+        # Optional: Add your GitHub token for authentication
+        headers = {"Authorization": "token YOUR_GITHUB_TOKEN"}
+
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()
+
+        commits = response.json()
+        commit_data = [
+            {
+                "message": commit["commit"]["message"],
+                "author": commit["commit"]["author"]["name"],
+                "date": commit["commit"]["author"]["date"]
+            }
+            for commit in commits[:5]  # Limit to the latest 5 commits
+        ]
+
+        return jsonify(commit_data), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
