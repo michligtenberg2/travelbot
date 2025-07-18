@@ -2,6 +2,7 @@ import unittest
 from unittest.mock import patch
 from app import app, get_wikipedia_summary, build_prompt
 
+
 class TestApp(unittest.TestCase):
 
     def setUp(self):
@@ -36,6 +37,7 @@ class TestApp(unittest.TestCase):
         })
         self.assertEqual(response.status_code, 200)
         self.assertIn("text", response.get_json())
+
 
 if __name__ == '__main__':
     unittest.main()
