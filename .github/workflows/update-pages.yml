@@ -39,6 +39,11 @@ jobs:
           git commit -m "📜 Update changelog with $SHORT_SHA [skip ci]" || echo "No changes"
           git push
 
+      - name: Debug artifact contents
+        run: |
+          echo "Contents of docs directory:"
+          ls -R docs
+
       - name: Upload artifact for GitHub Pages
         uses: actions/upload-pages-artifact@v3
         with:
