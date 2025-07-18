@@ -5,7 +5,7 @@ vraagt OpenAI om een korte opmerking over de locatie. Het resultaat wordt als
 JSON teruggestuurd naar de telefoon zodat Text-to-Speech het kan voorlezen.
 """
 
-from flask import Flask, request, jsonify, session
+from flask import Flask, request, jsonify, session, send_from_directory
 import requests
 import os
 from flasgger import Swagger
@@ -19,6 +19,7 @@ from dotenv import load_dotenv
 from flask_caching import Cache
 import secrets
 import aiofiles
+from PIL import Image
 
 # Load environment variables from .env file
 load_dotenv()
@@ -435,6 +436,21 @@ async def async_marketplace():
         personas.append({"name": persona["name"], "description": persona.get("description", "")})
 
     return jsonify(personas)
+
+def compress_image(input_path, output_path, quality=85):
+    with Image.open(input_path) as img:
+        img.save(output_path, "JPEG", optimize=True, quality=quality)
+
+@app.route('/compress/<filename>', methods=['GET'])
+@cache.cached(timeout=3600, query_string=True)
+def serve_compressed_image(filename):
+    input_path = os.path.join('static/images', filename)
+    output_path = os.path.join('static/compressed', filename)
+
+    if not os.path.exists(output_path):
+        compress_image(input_path, output_path)
+
+    return send_from_directory('static/compressed', filename)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
