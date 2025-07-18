@@ -173,5 +173,10 @@
     "date": "2025-07-18",
     "version": "14b52af",
     "description": "site update"
+  },
+  {
+    "date": "2025-07-18",
+    "version": "36c7733",
+    "description": "Merge branch 'main' of https://github.com/michligtenberg2/travelbot"
   }
 ]
