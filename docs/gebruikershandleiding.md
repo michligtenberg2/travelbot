@@ -1,7 +1,7 @@
 # Travelbot Gebruikershandleiding
 
 ## Wat doet Travelbot?
-Travelbot is een locatiebewuste reisgenoot. Een oude Android-telefoon stuurt je GPS-positie naar een Flask-backend. Deze backend haalt een korte samenvatting van de omgeving op via Wikipedia en genereert met behulp van OpenAI een grappige reactie in de stijl van "Henk". De app leest dit hardop voor met Text-to-Speech.
+Travelbot is een locatiebewuste reisgenoot. Een oude Android-telefoon stuurt je GPS-positie naar een Flask-backend. Deze backend haalt een korte samenvatting van de omgeving op via Wikipedia en genereert met behulp van OpenAI een grappige reactie in de stijl van "Heino". De app leest dit hardop voor met Text-to-Speech.
 
 ## Hoe stel je hem in?
 1. Installeer de vereiste Python-pakketten in je Codespaces of lokale omgeving:
@@ -20,7 +20,7 @@ Travelbot is een locatiebewuste reisgenoot. Een oude Android-telefoon stuurt je 
 5. Zorg dat de app verbinding maakt met de backend-URL (standaard `http://10.0.2.2:5000`).
 
 ## Wat betekenen de knoppen?
-- **Stel vraag aan Henk** – stuurt de ingevoerde tekst plus je locatie naar de backend en leest Henk zijn antwoord voor.
+- **Stel vraag aan Heino** – stuurt de ingevoerde tekst plus je locatie naar de backend en leest Heino zijn antwoord voor.
 - **Speel soundboard-zin** – opent het soundboard waar je een korte geluidsclip kunt afspelen.
 - **Instellingen** – opent het instellingenmenu om onder meer het commentaar-interval en de backend-URL aan te passen.
 
