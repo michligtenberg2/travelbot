@@ -13,19 +13,45 @@ import java.net.HttpURLConnection
 import java.net.URL
 import kotlin.math.roundToInt
 
+/**
+ * ApiClient is verantwoordelijk voor het communiceren met de backend API.
+ * Het biedt methoden om locatiegegevens te verzenden en reacties op te halen.
+ */
 object ApiClient {
     private const val TAG = "ApiClient"
     private const val PREFS_NAME = "travelbot_cache"
 
+    /**
+     * Haalt de SharedPreferences op voor caching.
+     *
+     * @param context De context van de applicatie.
+     * @return SharedPreferences object voor caching.
+     */
     private fun cachePrefs(context: Context): SharedPreferences =
         context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
+    /**
+     * Genereert een unieke sleutel voor caching op basis van latitude en longitude.
+     *
+     * @param lat Latitude van de locatie.
+     * @param lon Longitude van de locatie.
+     * @return Een unieke cache-sleutel.
+     */
     private fun cacheKey(lat: Double, lon: Double): String {
         val rLat = (lat * 100).roundToInt() / 100.0
         val rLon = (lon * 100).roundToInt() / 100.0
         return "${'$'}rLat_${'$'}rLon"
     }
 
+    /**
+     * Verzendt locatiegegevens naar de backend en haalt een reactie op.
+     *
+     * @param context De context van de applicatie.
+     * @param lat Latitude van de locatie.
+     * @param lon Longitude van de locatie.
+     * @param question Optionele vraag om mee te sturen.
+     * @return De reactie van de backend als string, of null bij een fout.
+     */
     fun sendLocation(context: Context, lat: Double, lon: Double, question: String? = null): String? {
         val baseUrl = Settings.getBackendUrl(context)
         val url = URL("$baseUrl/comment")
