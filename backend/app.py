@@ -15,12 +15,17 @@ import httpx
 from functools import wraps
 import logging
 import json
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 app = Flask(__name__)
 CORS(app)  # Voeg CORS-ondersteuning toe
 Swagger(app)  # Voeg Swagger-documentatie toe
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+# Ensure OPENAI_API_KEY is set
 if not OPENAI_API_KEY:
     raise RuntimeError("OPENAI_API_KEY environment variable is missing")
 
