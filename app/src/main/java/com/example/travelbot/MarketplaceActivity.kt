@@ -2,9 +2,10 @@ package com.example.travelbot
 
 import android.os.Bundle
 import android.util.Log
-import android.widget.ListView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -13,22 +14,30 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.net.HttpURLConnection
 import java.net.URL
+import java.io.File
+import kotlin.math.min
 
 class MarketplaceActivity : AppCompatActivity() {
+
+    private var personas: List<JSONObject> = emptyList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_marketplace)
 
-        val marketplaceListView = findViewById<ListView>(R.id.marketplaceListView)
+        val marketplaceRecyclerView = findViewById<RecyclerView>(R.id.marketplaceRecyclerView)
+        marketplaceRecyclerView.layoutManager = LinearLayoutManager(this)
 
         // Fetch personas from the marketplace endpoint
         CoroutineScope(Dispatchers.Main).launch {
-            val personas = fetchMarketplacePersonas()
-            if (personas != null) {
-                val personaNames = personas.map { it.getString("name") }
-                val adapter = PersonaListAdapter(this@MarketplaceActivity, personaNames)
-                marketplaceListView.adapter = adapter
+            val fetchedPersonas = fetchMarketplacePersonas()
+            if (fetchedPersonas != null) {
+                personas = fetchedPersonas
+                val pageSize = 10
+                var currentPage = 0
+                val currentPersonas = fetchMarketplacePersonasPaginated(currentPage, pageSize)
+                val adapter = PersonaRecyclerAdapter(currentPersonas.map { it.getString("name") })
+                marketplaceRecyclerView.adapter = adapter
             } else {
                 Toast.makeText(this@MarketplaceActivity, "Failed to load marketplace personas", Toast.LENGTH_SHORT).show()
             }
@@ -56,6 +65,12 @@ class MarketplaceActivity : AppCompatActivity() {
         }
     }
 
+    private fun fetchMarketplacePersonasPaginated(page: Int, pageSize: Int): List<JSONObject> {
+        val start = page * pageSize
+        val end = min(start + pageSize, personas.size)
+        return personas.subList(start, end)
+    }
+
     private fun loadMarketplace() {
         try {
             // ...existing code...
@@ -70,5 +85,15 @@ class MarketplaceActivity : AppCompatActivity() {
             Log.e("MarketplaceActivity", "Error loading marketplace", e)
             Toast.makeText(this, "An error occurred while loading the marketplace", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun savePersonaLocally(personaName: String, personaData: String) {
+        val file = File(filesDir, "$personaName.json")
+        file.writeText(personaData)
+    }
+
+    private fun loadPersonaLocally(personaName: String): String? {
+        val file = File(filesDir, "$personaName.json")
+        return if (file.exists()) file.readText() else null
     }
 }
