@@ -14,6 +14,7 @@ import asyncio
 import httpx
 from functools import wraps
 import logging
+import json
 
 app = Flask(__name__)
 CORS(app)  # Voeg CORS-ondersteuning toe
@@ -260,6 +261,29 @@ def protected_endpoint():
 @admin_required
 def admin_access():
     return jsonify({"message": "Admin access granted", "api_key": "<YOUR_ADMIN_API_KEY>"})
+
+@app.route('/personas', methods=['GET'])
+def get_personas():
+    """Endpoint to list all available personas."""
+    personas_dir = os.path.join(os.path.dirname(__file__), 'personas')
+    personas = []
+    for filename in os.listdir(personas_dir):
+        if filename.endswith('.json'):
+            with open(os.path.join(personas_dir, filename), 'r') as f:
+                persona = json.load(f)
+                personas.append({"name": persona["name"], "description": persona["description"]})
+    return jsonify(personas)
+
+@app.route('/load-persona/<persona_name>', methods=['GET'])
+def load_persona(persona_name):
+    """Endpoint to load a specific persona."""
+    personas_dir = os.path.join(os.path.dirname(__file__), 'personas')
+    persona_file = os.path.join(personas_dir, f'{persona_name}.json')
+    if os.path.exists(persona_file):
+        with open(persona_file, 'r') as f:
+            persona = json.load(f)
+        return jsonify(persona)
+    return jsonify({"error": "Persona not found"}), 404
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
