@@ -6,3 +6,4 @@ httpx
 python-dotenv
 flask-caching
 aiofiles
+Pillow

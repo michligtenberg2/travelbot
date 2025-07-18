@@ -26,14 +26,10 @@ Lees dit document in het Engels via [README-en.md](README-en.md).
    export OPENAI_API_KEY=sk-xxx
    ```
 
-4. Start de backend:
-
-   ```bash
-   python backend/app.py
-   ```
+4. De backend is nu gehost op Render. Lokale hosting is niet meer nodig.
 
 5. Open de map `app/` in Android Studio, bouw de app en installeer de APK op je telefoon.
-6. Vul in de app het adres van je backend in en je bent klaar!
+6. Vul in de app het adres van je Render-backend in en je bent klaar!
 
 ## 🎬 Voorbeeldgebruik
 
