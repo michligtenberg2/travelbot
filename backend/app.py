@@ -12,6 +12,7 @@ from flasgger import Swagger
 from flask_cors import CORS
 import asyncio
 import httpx
+from functools import wraps
 
 app = Flask(__name__)
 CORS(app)  # Voeg CORS-ondersteuning toe
@@ -20,6 +21,31 @@ Swagger(app)  # Voeg Swagger-documentatie toe
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 if not OPENAI_API_KEY:
     raise RuntimeError("OPENAI_API_KEY environment variable is missing")
+
+# Hardcoded admin credentials
+ADMIN_CREDENTIALS = {
+    "username": "admin",
+    "password": "root"
+}
+
+def admin_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        auth = request.authorization
+        if auth and auth.username == ADMIN_CREDENTIALS["username"] and auth.password == ADMIN_CREDENTIALS["password"]:
+            return f(*args, **kwargs)
+        return jsonify({"error": "Unauthorized access"}), 401
+    return decorated_function
+
+@app.before_request
+def validate_api_key():
+    user_api_key = request.headers.get('X-API-KEY')
+    if not user_api_key:
+        return jsonify({"error": "API key is required"}), 401
+
+    # Optionally, validate the format or length of the API key here
+    # Example: if len(user_api_key) != 32:
+    #             return jsonify({"error": "Invalid API key format"}), 401
 
 @app.route('/comment', methods=['POST'])
 def comment():
@@ -145,6 +171,11 @@ def query_openai(prompt):
         return result["choices"][0]["message"]["content"]
     except Exception as e:
         return "Ik weet effe niks zinnigs te zeggen, maat."
+
+@app.route('/admin-access', methods=['GET'])
+@admin_required
+def admin_access():
+    return jsonify({"message": "Admin access granted", "api_key": "<YOUR_ADMIN_API_KEY>"})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

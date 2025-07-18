@@ -57,6 +57,10 @@ object ApiClient {
             conn.requestMethod = "POST"
             conn.doOutput = true
             conn.setRequestProperty("Content-Type", "application/json")
+            val apiKey = Settings.getApiKey(context)
+            if (apiKey.isNotEmpty()) {
+                conn.setRequestProperty("X-API-KEY", apiKey)
+            }
 
             OutputStreamWriter(conn.outputStream).use { it.write(body) }
 
