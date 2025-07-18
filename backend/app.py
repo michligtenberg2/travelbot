@@ -40,12 +40,20 @@ ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "root")
 # Generate a secure token for admin access
 ADMIN_TOKEN = secrets.token_hex(16)
 
+# Define admin credentials
+ADMIN_CREDENTIALS = {
+    "username": "admin",
+    "password": "securepassword123"
+}
+
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
 # Configure caching
-cache = Cache(app, config={'CACHE_TYPE': 'SimpleCache'})
+app.config['CACHE_TYPE'] = 'SimpleCache'  # Use SimpleCache for development
+app.config['CACHE_DEFAULT_TIMEOUT'] = 300  # Cache timeout in seconds
+cache = Cache(app)
 
 def admin_required(f):
     @wraps(f)
@@ -395,6 +403,7 @@ def get_commits():
         return jsonify({"error": str(e)}), 500
 
 @app.route('/marketplace', methods=['GET'])
+@cache.cached()
 def marketplace():
     """Endpoint to list all available personas in the marketplace."""
     marketplace_dir = os.path.join(os.path.dirname(__file__), 'marketplace')
