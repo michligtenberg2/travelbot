@@ -48,4 +48,19 @@
         android:layout_marginTop="24dp"
         android:text="Opslaan" />
 
+    <EditText
+        android:id="@+id/backendUrlField"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Backend URL"
+        android:inputType="textUri"
+        android:layout_marginTop="16dp"/>
+
+    <Button
+        android:id="@+id/saveButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Save"
+        android:layout_marginTop="8dp"/>
+
 </LinearLayout>

@@ -5,7 +5,7 @@ vraagt OpenAI om een korte opmerking over de locatie. Het resultaat wordt als
 JSON teruggestuurd naar de telefoon zodat Text-to-Speech het kan voorlezen.
 """
 
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, session
 import requests
 import os
 from flasgger import Swagger
@@ -13,6 +13,7 @@ from flask_cors import CORS
 import asyncio
 import httpx
 from functools import wraps
+import logging
 
 app = Flask(__name__)
 CORS(app)  # Voeg CORS-ondersteuning toe
@@ -22,11 +23,17 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 if not OPENAI_API_KEY:
     raise RuntimeError("OPENAI_API_KEY environment variable is missing")
 
+app.secret_key = os.getenv("SECRET_KEY", "default_secret_key")  # Set a secret key for session management
+
 # Hardcoded admin credentials
 ADMIN_CREDENTIALS = {
     "username": "admin",
     "password": "root"
 }
+
+# Configure logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
 def admin_required(f):
     @wraps(f)
@@ -37,14 +44,25 @@ def admin_required(f):
         return jsonify({"error": "Unauthorized access"}), 401
     return decorated_function
 
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not session.get("logged_in"):
+            return jsonify({"error": "Unauthorized access"}), 401
+        return f(*args, **kwargs)
+    return decorated_function
+
 @app.before_request
 def validate_api_key():
     user_api_key = request.headers.get('X-API-KEY')
+    logger.info(f"Received API key: {user_api_key}")  # Log the received API key
     if not user_api_key:
+        logger.warning("API key is missing")  # Log a warning if the API key is missing
         return jsonify({"error": "API key is required"}), 401
 
     # Optionally, validate the format or length of the API key here
     # Example: if len(user_api_key) != 32:
+    #             logger.error("Invalid API key format")
     #             return jsonify({"error": "Invalid API key format"}), 401
 
 @app.route('/comment', methods=['POST'])
@@ -171,6 +189,51 @@ def query_openai(prompt):
         return result["choices"][0]["message"]["content"]
     except Exception as e:
         return "Ik weet effe niks zinnigs te zeggen, maat."
+
+@app.route('/login', methods=['POST'])
+def login():
+    """
+    Login endpoint
+    ---
+    parameters:
+      - name: username
+        in: body
+        type: string
+        required: true
+        description: The admin username
+      - name: password
+        in: body
+        type: string
+        required: true
+        description: The admin password
+    responses:
+      200:
+        description: Login successful
+      401:
+        description: Invalid credentials
+    """
+    data = request.json
+    if data.get("username") == ADMIN_CREDENTIALS["username"] and data.get("password") == ADMIN_CREDENTIALS["password"]:
+        session["logged_in"] = True
+        return jsonify({"message": "Login successful"})
+    return jsonify({"error": "Invalid credentials"}), 401
+
+@app.route('/logout', methods=['POST'])
+def logout():
+    """
+    Logout endpoint
+    ---
+    responses:
+      200:
+        description: Logged out successfully
+    """
+    session.pop("logged_in", None)
+    return jsonify({"message": "Logged out successfully"})
+
+@app.route('/protected-endpoint', methods=['GET'])
+@login_required
+def protected_endpoint():
+    return jsonify({"message": "You have access to this endpoint"})
 
 @app.route('/admin-access', methods=['GET'])
 @admin_required

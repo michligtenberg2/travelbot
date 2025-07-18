@@ -60,3 +60,34 @@ jobs:
       run: |
         git remote add heroku https://git.heroku.com/${{ secrets.HEROKU_APP_NAME }}.git
         git push heroku main -f
+
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: |
+        pip install -r backend/requirements.txt
+
+    - name: Run backend tests
+      run: |
+        pytest backend
+
+    - name: Set up Java
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'zulu'
+        java-version: '17'
+
+    - name: Build Android app
+      run: |
+        cd app
+        ./gradlew build
