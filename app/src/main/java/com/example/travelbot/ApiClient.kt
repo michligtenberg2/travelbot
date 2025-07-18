@@ -21,6 +21,8 @@ import kotlin.math.roundToInt
 object ApiClient {
     private const val TAG = "ApiClient"
     private const val PREFS_NAME = "travelbot_cache"
+    private const val KEY_BACKEND_URL = "backend_url"
+    private const val DEFAULT_BACKEND_URL = "http://10.0.2.2:5000"
 
     /**
      * Haalt de SharedPreferences op voor caching.
@@ -114,6 +116,51 @@ object ApiClient {
         } catch (e: Exception) {
             Log.e(TAG, "Onverwachte fout: ${e.message}", e)
             "Er is een onverwachte fout opgetreden. Probeer het later opnieuw."
+        }
+    }
+
+    /**
+     * Haalt de backend-URL op uit de SharedPreferences.
+     * Als er geen aangepaste URL is ingesteld, wordt een standaardwaarde gebruikt.
+     *
+     * @param context De context van de applicatie.
+     * @return De backend-URL als string.
+     */
+    private fun getBackendUrl(context: Context): String {
+        val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        return prefs.getString(KEY_BACKEND_URL, DEFAULT_BACKEND_URL) ?: DEFAULT_BACKEND_URL
+    }
+
+    /**
+     * Haalt gegevens op van de backend.
+     * Dit is een algemene functie die kan worden gebruikt om verschillende eindpunten te benaderen.
+     *
+     * @param context De context van de applicatie.
+     * @param endpoint Het specifieke eindpunt om gegevens van op te halen.
+     * @return Een JSONObject met de responsgegevens, of null bij een fout.
+     */
+    suspend fun fetchData(context: Context, endpoint: String): JSONObject? {
+        return withContext(Dispatchers.IO) {
+            val backendUrl = getBackendUrl(context)
+            val url = "$backendUrl/$endpoint"
+            try {
+                val connection = URL(url).openConnection() as HttpURLConnection
+                connection.requestMethod = "GET"
+
+                val responseCode = connection.responseCode
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    val reader = BufferedReader(InputStreamReader(connection.inputStream))
+                    val response = reader.readText()
+                    reader.close()
+                    JSONObject(response)
+                } else {
+                    Log.e(TAG, "Error: HTTP $responseCode")
+                    null
+                }
+            } catch (e: IOException) {
+                Log.e(TAG, "IOException: ${e.message}")
+                null
+            }
         }
     }
 }
