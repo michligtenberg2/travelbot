@@ -18,6 +18,7 @@ import json
 from dotenv import load_dotenv
 from flask_caching import Cache
 import secrets
+import aiofiles
 
 # Load environment variables from .env file
 load_dotenv()
@@ -412,7 +413,27 @@ def marketplace():
         if filename.endswith('.json'):
             with open(os.path.join(marketplace_dir, filename), 'r') as f:
                 persona = json.load(f)
-                personas.append({"name": persona["name"], "description": persona["description"]})
+                personas.append({"name": persona["name"], "description": persona.get("description", "")})
+    return jsonify(personas)
+
+@app.route('/async_marketplace', methods=['GET'])
+async def async_marketplace():
+    """Asynchronous endpoint to list all available personas in the marketplace."""
+    marketplace_dir = os.path.join(os.path.dirname(__file__), 'marketplace')
+    personas = []
+
+    async def load_persona(file_path):
+        async with aiofiles.open(file_path, mode='r') as f:
+            return json.loads(await f.read())
+
+    tasks = [
+        load_persona(os.path.join(marketplace_dir, filename))
+        for filename in os.listdir(marketplace_dir) if filename.endswith('.json')
+    ]
+
+    for persona in await asyncio.gather(*tasks):
+        personas.append({"name": persona["name"], "description": persona.get("description", "")})
+
     return jsonify(personas)
 
 if __name__ == '__main__':
