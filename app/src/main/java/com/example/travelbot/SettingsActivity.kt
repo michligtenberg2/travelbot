@@ -7,6 +7,9 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.Spinner
+import android.widget.EditText
+import android.widget.Button
+import android.widget.Toast
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -20,6 +23,8 @@ class SettingsActivity : AppCompatActivity() {
         val quietSwitch = findViewById<android.widget.Switch>(R.id.quietSwitch)
         val saveButton = findViewById<MaterialButton>(R.id.saveButton)
 
+        val backendUrlField = findViewById<EditText>(R.id.backendUrlField)
+
         val personas = PersonaManager.names()
         personaSpinner.adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, personas)
 
@@ -27,6 +32,10 @@ class SettingsActivity : AppCompatActivity() {
         urlInput.setText(Settings.getBackendUrl(this))
         personaSpinner.setSelection(personas.indexOf(Settings.getPersonality(this)))
         quietSwitch.isChecked = Settings.isQuietModeEnabled(this)
+
+        // Load current backend URL
+        val sharedPreferences = getSharedPreferences("travelbot_prefs", MODE_PRIVATE)
+        backendUrlField.setText(sharedPreferences.getString("backend_url", ""))
 
         saveButton.setOnClickListener {
             val interval = intervalInput.text.toString().toIntOrNull() ?: 15
@@ -36,6 +45,14 @@ class SettingsActivity : AppCompatActivity() {
             Settings.setBackendUrl(this, url)
             Settings.setPersonality(this, personality)
             Settings.setQuietModeEnabled(this, quietSwitch.isChecked)
+
+            val newUrl = backendUrlField.text.toString()
+            if (newUrl.isNotEmpty()) {
+                sharedPreferences.edit().putString("backend_url", newUrl).apply()
+                Toast.makeText(this, "Backend URL saved", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Please enter a valid URL", Toast.LENGTH_SHORT).show()
+            }
             finish()
         }
     }
