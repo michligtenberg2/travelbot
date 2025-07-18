@@ -10,7 +10,7 @@ import kotlin.math.roundToInt
  */
 class LocationCacheRepository(context: Context) {
     
-    private val dao = TravelBotDatabase.getDatabase(context).locationCacheDao()
+    private val dao = AppDatabase.getInstance(context).locationCacheDao()
     
     /**
      * Generates a cache key from latitude and longitude
