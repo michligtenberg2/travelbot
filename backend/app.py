@@ -285,5 +285,39 @@ def load_persona(persona_name):
         return jsonify(persona)
     return jsonify({"error": "Persona not found"}), 404
 
+@app.route('/upload-persona', methods=['POST'])
+def upload_persona():
+    """Endpoint to upload a custom persona as a JSON file.
+    ---
+    parameters:
+      - name: persona
+        in: body
+        type: object
+        required: true
+        description: The persona data
+    responses:
+      200:
+        description: Persona uploaded successfully
+      400:
+        description: Bad request, invalid data
+      500:
+        description: Internal server error
+    """
+    try:
+        persona = request.json
+        name = persona.get('name')
+        description = persona.get('description')
+
+        if not name or not description:
+            return jsonify({'error': 'Name and description are required'}), 400
+
+        # Save persona to a file or database (example: saving to a JSON file)
+        with open(f'personas/{name}.json', 'w') as f:
+            json.dump(persona, f)
+
+        return jsonify({'message': 'Persona uploaded successfully'}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
