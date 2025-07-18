@@ -16,6 +16,7 @@ from functools import wraps
 import logging
 import json
 from dotenv import load_dotenv
+from flask_caching import Cache
 
 # Load environment variables from .env file
 load_dotenv()
@@ -40,6 +41,9 @@ ADMIN_CREDENTIALS = {
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
+
+# Configure caching
+cache = Cache(app, config={'CACHE_TYPE': 'SimpleCache'})
 
 def admin_required(f):
     @wraps(f)
@@ -268,6 +272,7 @@ def admin_access():
     return jsonify({"message": "Admin access granted", "api_key": "<YOUR_ADMIN_API_KEY>"})
 
 @app.route('/personas', methods=['GET'])
+@cache.cached(timeout=300)
 def get_personas():
     """Endpoint to list all available personas."""
     personas_dir = os.path.join(os.path.dirname(__file__), 'personas')
