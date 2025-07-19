@@ -5,7 +5,9 @@
 [![Codespaces Ready](https://github.com/codespaces/badge.svg)](https://github.com/codespaces)
 [![Made with Kotlin & Flask](https://img.shields.io/badge/Made%20with-Kotlin%20%26%20Flask-blue)](#)
 
-**Travelbot** is een AI-reisgenoot die iedere 15 minuten een grappige opmerking maakt over je huidige locatie. De app draait op een Android-telefoon en gebruikt een kleine Flask-backend om via OpenAI teksten op te halen.
+**Travelbot** is een AI-reisgenoot die iedere 15 minuten een grappige opmerking maakt over je huidige locatie. Beschikbaar als Android-app en webapplicatie.
+
+🌐 **Nieuwe WebApp**: Safari-compatibele GPS webapp is nu beschikbaar in de `travelbot-webapp` branch! [→ Bekijk WebApp](../../tree/travelbot-webapp/webapp)
 
 Lees dit document in het Engels via [README-en.md](README-en.md).
 
@@ -44,10 +46,21 @@ Meer uitleg vind je op de [GitHub Pages site](https://michligtenberg2.github.io/
 ## 📂 Projectstructuur
 
 ```
-backend/   Flask API die reacties genereert
+backend/   Flask API die reacties genereert  
 app/       Android-app geschreven in Kotlin
+webapp/    WebApp versie (Safari-compatible GPS) - zie travelbot-webapp branch
 docs/      Documentatie (GitHub Pages)
 ```
+
+### 🆕 WebApp Features (travelbot-webapp branch)
+- 📍 Live GPS tracking met `navigator.geolocation` (Safari compatible)
+- 🗣️ Web Speech API voor gesproken reacties
+- 💾 PWA support met offline functionaliteit
+- 🎭 Persona selector (Heino, Belg, Sergio Herman)  
+- 🎮 Simulatie modus voor ontwikkeling
+- 📱 Mobile-first design geoptimaliseerd voor gebruik in auto
+
+[→ Bekijk WebApp documentatie](../../tree/travelbot-webapp/webapp/README.md)
 
 ## 🛠️ Troubleshooting
 
