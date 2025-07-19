@@ -20,66 +20,60 @@ jobs:
       with:
         node-version: '18'
         cache: 'npm'
+        cache-dependency-path: 'travelbot-ipa-builder/package-lock.json'
 
-    - name: Install Cordova CLI
+    - name: Install Capacitor CLI
       run: |
-        npm install -g cordova
-        cordova --version
+        npm install -g @capacitor/cli @ionic/cli
+        cap --version
 
-    - name: Navigate to Cordova project and install dependencies
+    - name: Navigate to Capacitor project and install dependencies
       run: |
-        cd cordova-travelbot
-        if [ -f package.json ]; then npm install; fi
+        cd travelbot-ipa-builder
+        npm install
 
-    - name: Ensure iOS platform
+    - name: Sync Capacitor iOS
       run: |
-        cd cordova-travelbot
-        cordova platform list
-        if ! cordova platform ls | grep -q ios; then
-          cordova platform add ios
-        fi
+        cd travelbot-ipa-builder
+        cap sync ios
 
-    - name: Install required plugins
+    - name: Build iOS project with Xcode
       run: |
-        cd cordova-travelbot
-        cordova plugin list
-        cordova plugin add cordova-plugin-geolocation || true
-        cordova plugin add cordova-plugin-device || true
+        cd travelbot-ipa-builder/ios/App
+        # Build the app without signing
+        xcodebuild -workspace App.xcworkspace \
+          -scheme App \
+          -configuration Release \
+          -destination generic/platform=iOS \
+          -archivePath App.xcarchive \
+          CODE_SIGN_IDENTITY="" \
+          CODE_SIGNING_REQUIRED=NO \
+          CODE_SIGNING_ALLOWED=NO \
+          archive
 
-    - name: Prepare iOS build
+    - name: Create unsigned IPA
       run: |
-        cd cordova-travelbot
-        cordova prepare ios
-
-    - name: Build iOS app (without signing)
-      run: |
-        cd cordova-travelbot
-        cordova build ios --release --buildConfig=build.json
-
-    - name: Create build config for unsigned build
-      run: |
-        cd cordova-travelbot
-        cat > build.json << EOF
-        {
-          "ios": {
-            "release": {
-              "codeSignIdentity": "",
-              "provisioningProfile": "",
-              "developmentTeam": "",
-              "packageType": "development",
-              "buildFlag": [
-                "CODE_SIGN_IDENTITY=",
-                "CODE_SIGNING_REQUIRED=NO",
-                "CODE_SIGNING_ALLOWED=NO"
-              ]
-            }
-          }
-        }
+        cd travelbot-ipa-builder/ios/App
+        # Create export options
+        cat > export-options.plist << EOF
+        <?xml version="1.0" encoding="UTF-8"?>
+        <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+        <plist version="1.0">
+        <dict>
+            <key>method</key>
+            <string>development</string>
+            <key>signingStyle</key>
+            <string>manual</string>
+        </dict>
+        </plist>
         EOF
-
-    - name: Archive and create IPA manually
-      run: |
-        cd cordova-travelbot/platforms/ios
+        
+        # Export IPA
+        xcodebuild -exportArchive \
+          -archivePath App.xcarchive \
+          -exportPath ./build \
+          -exportOptionsPlist export-options.plist \
+          -allowProvisioningUpdates
         
         # Create export options for development
         cat > exportOptions.plist << EOF
@@ -126,14 +120,11 @@ jobs:
       with:
         name: travelbot-ios-app
         path: |
-          cordova-travelbot/platforms/ios/build/*.ipa
-          cordova-travelbot/platforms/ios/build/TravelBot.xcarchive
+          travelbot-ipa-builder/ios/App/build/*.ipa
         retention-days: 30
 
-    - name: Upload to Release (if tag)
-      if: startsWith(github.ref, 'refs/tags/')
-      uses: softprops/action-gh-release@v1
-      with:
-        files: cordova-travelbot/platforms/ios/build/*.ipa
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: List build results  
+      run: |
+        echo "=== Build Results ==="
+        ls -la travelbot-ipa-builder/ios/App/build/ || echo "Build directory not found"
+        find travelbot-ipa-builder/ios/App -name "*.ipa" -type f || echo "No IPA files found"
