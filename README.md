@@ -7,20 +7,58 @@
 
 **Travelbot** is een AI-reisgenoot die iedere 15 minuten een grappige opmerking maakt over je huidige locatie. Beschikbaar als Android app en moderne webapp.
 
-🆕 **Nieuw: WebApp Edition** - Gebruik TravelBot nu direct in je browser met GPS ondersteuning!
+🆕 **Nieuw: v3.0 Advanced Edition** - Voice commands, meertalig, night mode en veel meer!
+
+## 📊 Development Roadmap
+
+![TravelBot Roadmap](./docs/assets/roadmap.svg)
+
+*[🔗 Interactieve roadmap bekijken](./docs/assets/roadmap.html)*
 
 Lees dit document in het Engels via [README-en.md](README-en.md).
 
-## 🚀 Nieuwe Features in deze Release
+## 🚀 What's New in v3.0
 
-### 🌐 **WebApp Edition**
-- ✅ **Safari-compatible GPS webapp** - Werkt perfect op iOS/iPhone
-- ✅ **Real-time location tracking** - Geen app installatie nodig
-- ✅ **Interactive AI chat** - Chat direct met je AI reisgenoot  
-- ✅ **Multiple personas** - Amsterdammer, Belg, Brabander, Jordanees
-- ✅ **Text-to-Speech** - Gesproken commentaren in browser
-- ✅ **PWA ready** - Installeerbaar als native app
-- ✅ **Background audio support** - Audio blijft spelen bij screen lock
+### 🗣️ **Voice Commands**
+- ✅ **Web Speech API** - Natuurlijke spraakherkenning
+- ✅ **Multi-language support** - Commands in NL/EN/DE/FR
+- ✅ **Hands-free operation** - "Waar ben ik?", "Zeg iets cynisch"
+- ✅ **Smart fallbacks** - Browser compatibility check
+
+### 🌍 **Multilingual Interface**  
+- ✅ **4 Language support** - Nederlands, English, Deutsch, Français
+- ✅ **Dynamic translation** - Real-time language switching
+- ✅ **Persona responses** - Translated character responses
+- ✅ **Voice synthesis** - Multi-language TTS support
+
+### 🧭 **Route-based AI Commentary**
+- ✅ **Movement analysis** - Direction, speed, pattern detection  
+- ✅ **Dynamic responses** - Comments on driving behavior
+- ✅ **Location context** - Smart geographic awareness
+- ✅ **Advanced GPS tracking** - High precision location updates
+
+### 💤 **Night Mode & Theming**
+- ✅ **Automatic dark mode** - Time-based theme switching
+- ✅ **Custom color schemes** - Per persona styling
+- ✅ **Reduced brightness** - Easy on the eyes during night driving
+- ✅ **Ambient lighting** - Subtle interface animations
+
+### 📤 **Shareable Travel Quotes**
+- ✅ **Canvas-generated images** - Beautiful quote cards
+- ✅ **Social media ready** - Optimized for sharing
+- ✅ **Persona-themed design** - Character-specific styling
+- ✅ **One-click sharing** - Native browser share API
+
+### 🔧 **Developer Tools**
+- ✅ **Location simulation** - Test mode for development
+- ✅ **Performance monitoring** - FPS, memory, API metrics
+- ✅ **Debug interface** - Real-time system information
+- ✅ **Mock data generation** - Comprehensive testing suite
+
+### 🌐 **Enhanced WebApp**
+- ✅ **Progressive Web App** - Installable, offline-ready
+- ✅ **Service Worker** - Smart caching strategies
+- ✅ **Background sync** - Seamless data management
 
 ### 🎭 **AI Character Voices (Preview)**
 - 🎤 **OpenAI TTS integration** - Studio-kwaliteit AI stemmen

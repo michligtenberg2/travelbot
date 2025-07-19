@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TravelBot v3.0 Visual Roadmap</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .roadmap-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+        }
+        
+        .roadmap-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .roadmap-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .roadmap-svg {
+            width: 100%;
+            height: 800px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 15px;
+            background: #f8f9fa;
+            border-radius: 25px;
+            font-size: 14px;
+        }
+        
+        .legend-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+        }
+        
+        .export-controls {
+            text-align: center;
+            margin-top: 30px;
+            gap: 15px;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .export-btn {
+            background: #2196F3;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .export-btn:hover {
+            background: #1976D2;
+            transform: translateY(-2px);
+        }
+        
+        @media (max-width: 768px) {
+            .roadmap-container {
+                margin: 10px;
+                padding: 20px;
+            }
+            
+            .roadmap-header h1 {
+                font-size: 2rem;
+            }
+            
+            .roadmap-svg {
+                height: 600px;
+            }
+            
+            .legend {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="roadmap-container">
+        <div class="roadmap-header">
+            <h1>🚗 TravelBot v3.0 Visual Roadmap</h1>
+            <p>Interactieve ontwikkelingsroadmap met features, timeline en status</p>
+        </div>
+        
+        <svg class="roadmap-svg" viewBox="0 0 1300 800" xmlns="http://www.w3.org/2000/svg">
+            <!-- Background gradient -->
+            <defs>
+                <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#f8f9ff;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#e3f2fd;stop-opacity:1" />
+                </linearGradient>
+                
+                <linearGradient id="completedGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#4CAF50;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#45a049;stop-opacity:1" />
+                </linearGradient>
+                
+                <linearGradient id="inProgressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#FF9800;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#f57c00;stop-opacity:1" />
+                </linearGradient>
+                
+                <linearGradient id="plannedGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#2196F3;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#1976D2;stop-opacity:1" />
+                </linearGradient>
+                
+                <linearGradient id="futureGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#9C27B0;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#7B1FA2;stop-opacity:1" />
+                </linearGradient>
+                
+                <!-- Animated pulse effect -->
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+                    <feMerge> 
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                
+                <!-- Arrow markers -->
+                <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                    <polygon points="0 0, 10 3.5, 0 7" fill="#666" />
+                </marker>
+            </defs>
+            
+            <!-- Background -->
+            <rect width="100%" height="100%" fill="url(#bgGradient)" rx="15" ry="15"/>
+            
+            <!-- Timeline line -->
+            <line x1="50" y1="400" x2="1250" y2="400" stroke="#ddd" stroke-width="3" stroke-dasharray="5,5"/>
+            
+            <!-- v2.0 Completed -->
+            <g transform="translate(100, 150)">
+                <rect width="200" height="150" rx="15" ry="15" fill="url(#completedGradient)" filter="url(#glow)"/>
+                <text x="100" y="30" text-anchor="middle" fill="white" font-size="18" font-weight="bold">✅ v2.0 Completed</text>
+                <text x="100" y="55" text-anchor="middle" fill="white" font-size="12">WebApp Edition</text>
+                <text x="100" y="75" text-anchor="middle" fill="white" font-size="12">Safari GPS Support</text>
+                <text x="100" y="95" text-anchor="middle" fill="white" font-size="12">AI Personas + TTS</text>
+                <text x="100" y="115" text-anchor="middle" fill="white" font-size="12">PWA Ready</text>
+                <text x="100" y="135" text-anchor="middle" fill="white" font-size="12">Chat Interface</text>
+            </g>
+            
+            <!-- Arrow to v3.0 -->
+            <path d="M 300 225 Q 400 200 500 225" stroke="#666" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+            
+            <!-- v3.0 In Progress -->
+            <g transform="translate(500, 100)">
+                <rect width="250" height="200" rx="15" ry="15" fill="url(#inProgressGradient)" filter="url(#glow)">
+                    <animateTransform attributeName="transform" attributeType="XML" type="scale" values="1;1.05;1" dur="2s" repeatCount="indefinite"/>
+                </rect>
+                <text x="125" y="30" text-anchor="middle" fill="white" font-size="18" font-weight="bold">🔄 v3.0 In Progress</text>
+                <text x="125" y="55" text-anchor="middle" fill="white" font-size="12">🗣️ Voice Commands</text>
+                <text x="125" y="75" text-anchor="middle" fill="white" font-size="12">🌍 Multilingual UI (4 langs)</text>
+                <text x="125" y="95" text-anchor="middle" fill="white" font-size="12">🧭 Route Comments</text>
+                <text x="125" y="115" text-anchor="middle" fill="white" font-size="12">💤 Night Mode</text>
+                <text x="125" y="135" text-anchor="middle" fill="white" font-size="12">📤 Shareable Quotes</text>
+                <text x="125" y="155" text-anchor="middle" fill="white" font-size="12">🧪 Development Tools</text>
+                <text x="125" y="175" text-anchor="middle" fill="white" font-size="12">📱 Mobile Optimization</text>
+            </g>
+            
+            <!-- Arrow to Testing -->
+            <path d="M 750 200 Q 850 175 950 200" stroke="#666" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+            
+            <!-- Testing Phase -->
+            <g transform="translate(950, 150)">
+                <rect width="200" height="150" rx="15" ry="15" fill="#FFC107" stroke="#FF8F00" stroke-width="2"/>
+                <text x="100" y="30" text-anchor="middle" fill="white" font-size="18" font-weight="bold">🧪 Testing & QA</text>
+                <text x="100" y="55" text-anchor="middle" fill="white" font-size="12">📱 iOS Safari Testing</text>
+                <text x="100" y="75" text-anchor="middle" fill="white" font-size="12">🎤 Voice UX Testing</text>
+                <text x="100" y="95" text-anchor="middle" fill="white" font-size="12">📊 Performance Logging</text>
+                <text x="100" y="115" text-anchor="middle" fill="white" font-size="12">🐛 Bug Fixes</text>
+                <text x="100" y="135" text-anchor="middle" fill="white" font-size="12">👥 User Feedback</text>
+            </g>
+            
+            <!-- Arrow down to v3.1 -->
+            <path d="M 625 300 Q 625 375 625 450" stroke="#666" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+            
+            <!-- v3.1 Advanced Features -->
+            <g transform="translate(500, 450)">
+                <rect width="250" height="180" rx="15" ry="15" fill="url(#plannedGradient)" stroke="#1976D2" stroke-width="2"/>
+                <text x="125" y="30" text-anchor="middle" fill="white" font-size="18" font-weight="bold">🌟 v3.1 Advanced</text>
+                <text x="125" y="55" text-anchor="middle" fill="white" font-size="12">🤖 OpenAI TTS Integration</text>
+                <text x="125" y="75" text-anchor="middle" fill="white" font-size="12">🎭 Custom Personas</text>
+                <text x="125" y="95" text-anchor="middle" fill="white" font-size="12">📊 Server Analytics</text>
+                <text x="125" y="115" text-anchor="middle" fill="white" font-size="12">🎵 Voice Cloning</text>
+                <text x="125" y="135" text-anchor="middle" fill="white" font-size="12">📈 Enhanced Dashboard</text>
+                <text x="125" y="155" text-anchor="middle" fill="white" font-size="12">🧠 Smart Responses</text>
+            </g>
+            
+            <!-- Arrow to v4.0 -->
+            <path d="M 750 540 Q 850 540 950 540" stroke="#666" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+            
+            <!-- v4.0 Future Vision -->
+            <g transform="translate(950, 460)">
+                <rect width="200" height="160" rx="15" ry="15" fill="url(#futureGradient)" stroke="#7B1FA2" stroke-width="2"/>
+                <text x="100" y="30" text-anchor="middle" fill="white" font-size="18" font-weight="bold">🚀 v4.0 Future</text>
+                <text x="100" y="55" text-anchor="middle" fill="white" font-size="12">🥽 AR Navigation</text>
+                <text x="100" y="75" text-anchor="middle" fill="white" font-size="12">👥 Social Features</text>
+                <text x="100" y="95" text-anchor="middle" fill="white" font-size="12">🗺️ Trip Planning</text>
+                <text x="100" y="115" text-anchor="middle" fill="white" font-size="12">🧠 Smart Assistant</text>
+                <text x="100" y="135" text-anchor="middle" fill="white" font-size="12">☁️ Cloud Sync</text>
+            </g>
+            
+            <!-- Side features -->
+            <g transform="translate(50, 500)">
+                <rect width="180" height="120" rx="10" ry="10" fill="#E1F5FE" stroke="#0288D1" stroke-width="1"/>
+                <text x="90" y="25" text-anchor="middle" fill="#0288D1" font-size="14" font-weight="bold">🔧 Tech Stack</text>
+                <text x="90" y="45" text-anchor="middle" fill="#0288D1" font-size="11">Web Speech API</text>
+                <text x="90" y="60" text-anchor="middle" fill="#0288D1" font-size="11">PWA Technology</text>
+                <text x="90" y="75" text-anchor="middle" fill="#0288D1" font-size="11">Canvas Graphics</text>
+                <text x="90" y="90" text-anchor="middle" fill="#0288D1" font-size="11">Service Workers</text>
+                <text x="90" y="105" text-anchor="middle" fill="#0288D1" font-size="11">GPS Geolocation</text>
+            </g>
+            
+            <!-- Progress indicators -->
+            <g transform="translate(100, 50)">
+                <text x="0" y="0" fill="#4CAF50" font-size="16" font-weight="bold">v2.0: 100% ✅</text>
+            </g>
+            
+            <g transform="translate(525, 50)">
+                <text x="0" y="0" fill="#FF9800" font-size="16" font-weight="bold">v3.0: 85% 🔄</text>
+            </g>
+            
+            <g transform="translate(975, 100)">
+                <text x="0" y="0" fill="#FFC107" font-size="16" font-weight="bold">Testing: 0% 🧪</text>
+            </g>
+            
+            <g transform="translate(525, 400)">
+                <text x="0" y="0" fill="#2196F3" font-size="16" font-weight="bold">v3.1: Planned 📋</text>
+            </g>
+            
+            <g transform="translate(975, 410)">
+                <text x="0" y="0" fill="#9C27B0" font-size="16" font-weight="bold">v4.0: Research 🔬</text>
+            </g>
+            
+            <!-- Timeline markers -->
+            <circle cx="200" cy="400" r="8" fill="#4CAF50"/>
+            <text x="200" y="430" text-anchor="middle" fill="#4CAF50" font-size="12" font-weight="bold">Q2 2025</text>
+            
+            <circle cx="625" cy="400" r="8" fill="#FF9800"/>
+            <text x="625" y="430" text-anchor="middle" fill="#FF9800" font-size="12" font-weight="bold">Q3 2025</text>
+            
+            <circle cx="1050" cy="400" r="8" fill="#2196F3"/>
+            <text x="1050" y="430" text-anchor="middle" fill="#2196F3" font-size="12" font-weight="bold">Q4 2025</text>
+            
+            <!-- Feature highlights -->
+            <g transform="translate(280, 350)">
+                <circle cx="0" cy="0" r="25" fill="#4CAF50" fill-opacity="0.2" stroke="#4CAF50" stroke-width="2">
+                    <animate attributeName="r" values="20;30;20" dur="2s" repeatCount="indefinite"/>
+                </circle>
+                <text x="0" y="5" text-anchor="middle" fill="#4CAF50" font-size="20">🎤</text>
+            </g>
+            
+            <g transform="translate(480, 350)">
+                <circle cx="0" cy="0" r="25" fill="#FF9800" fill-opacity="0.2" stroke="#FF9800" stroke-width="2">
+                    <animate attributeName="r" values="20;30;20" dur="2s" repeatCount="indefinite" begin="0.5s"/>
+                </circle>
+                <text x="0" y="5" text-anchor="middle" fill="#FF9800" font-size="20">🌍</text>
+            </g>
+            
+            <g transform="translate(770, 350)">
+                <circle cx="0" cy="0" r="25" fill="#2196F3" fill-opacity="0.2" stroke="#2196F3" stroke-width="2">
+                    <animate attributeName="r" values="20;30;20" dur="2s" repeatCount="indefinite" begin="1s"/>
+                </circle>
+                <text x="0" y="5" text-anchor="middle" fill="#2196F3" font-size="20">📤</text>
+            </g>
+            
+            <!-- Version badge -->
+            <g transform="translate(1100, 720)">
+                <rect width="120" height="40" rx="20" ry="20" fill="#2196F3"/>
+                <text x="60" y="26" text-anchor="middle" fill="white" font-size="14" font-weight="bold">v3.0.0</text>
+            </g>
+            
+            <!-- Watermark -->
+            <g transform="translate(50, 720)" opacity="0.6">
+                <text x="0" y="0" fill="#666" font-size="12">🚗 TravelBot Development Team - July 2025</text>
+            </g>
+        </svg>
+        
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-icon" style="background: linear-gradient(135deg, #4CAF50, #45a049);"></div>
+                <span>Completed Features</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-icon" style="background: linear-gradient(135deg, #FF9800, #f57c00);"></div>
+                <span>In Development</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-icon" style="background: linear-gradient(135deg, #FFC107, #FF8F00);"></div>
+                <span>Testing Phase</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-icon" style="background: linear-gradient(135deg, #2196F3, #1976D2);"></div>
+                <span>Planned Features</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-icon" style="background: linear-gradient(135deg, #9C27B0, #7B1FA2);"></div>
+                <span>Future Vision</span>
+            </div>
+        </div>
+        
+        <div class="export-controls">
+            <button class="export-btn" onclick="downloadSVG()">📊 Download SVG</button>
+            <button class="export-btn" onclick="downloadPNG()">🖼️ Download PNG</button>
+            <button class="export-btn" onclick="printRoadmap()">🖨️ Print</button>
+        </div>
+    </div>
+    
+    <script>
+        function downloadSVG() {
+            const svg = document.querySelector('.roadmap-svg');
+            const svgData = new XMLSerializer().serializeToString(svg);
+            const svgBlob = new Blob([svgData], {type: "image/svg+xml;charset=utf-8"});
+            const svgUrl = URL.createObjectURL(svgBlob);
+            
+            const downloadLink = document.createElement("a");
+            downloadLink.href = svgUrl;
+            downloadLink.download = "travelbot-roadmap.svg";
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+            URL.revokeObjectURL(svgUrl);
+        }
+        
+        function downloadPNG() {
+            const svg = document.querySelector('.roadmap-svg');
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+            
+            canvas.width = 1300;
+            canvas.height = 800;
+            
+            const svgData = new XMLSerializer().serializeToString(svg);
+            const svgBlob = new Blob([svgData], {type: "image/svg+xml;charset=utf-8"});
+            const url = URL.createObjectURL(svgBlob);
+            
+            img.onload = function() {
+                ctx.drawImage(img, 0, 0);
+                const pngUrl = canvas.toDataURL('image/png');
+                
+                const downloadLink = document.createElement("a");
+                downloadLink.href = pngUrl;
+                downloadLink.download = "travelbot-roadmap.png";
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+                
+                URL.revokeObjectURL(url);
+            };
+            
+            img.src = url;
+        }
+        
+        function printRoadmap() {
+            window.print();
+        }
+        
+        // Add interactivity
+        document.addEventListener('DOMContentLoaded', function() {
+            const rects = document.querySelectorAll('rect[fill^="url(#"]');
+            
+            rects.forEach(rect => {
+                rect.addEventListener('mouseenter', function() {
+                    this.style.filter = 'url(#glow) brightness(1.1)';
+                    this.style.cursor = 'pointer';
+                });
+                
+                rect.addEventListener('mouseleave', function() {
+                    this.style.filter = 'url(#glow)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
