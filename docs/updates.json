@@ -238,5 +238,10 @@
     "date": "2025-07-19",
     "version": "d1f84d4",
     "description": "Merge pull request #27 from michligtenberg2/copilot/fix-c5a32b10-d40c-4284-bcd8-ef671dad9c63"
+  },
+  {
+    "date": "2025-07-19",
+    "version": "c65522f",
+    "description": "Simplify iOS build: Skip exportArchive and create IPA manually"
   }
 ]
