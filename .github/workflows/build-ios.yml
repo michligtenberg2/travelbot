@@ -64,84 +64,40 @@ jobs:
       run: |
         cd travelbot-ipa-builder/ios/App
 
-        # Verify required files exist
+        # Verify archive exists
         if [ ! -d "App.xcarchive" ]; then
           echo "❌ Error: App.xcarchive not found. Previous build step may have failed."
-          exit 1
-        fi
-
-        if [ ! -d "App.xcworkspace" ]; then
-          echo "❌ Error: App.xcworkspace not found."
           exit 1
         fi
 
         # Create build directory
         mkdir -p ./build
 
-        # Create single export options plist for unsigned distribution
-        cat > export-options.plist << EOF
-        <?xml version="1.0" encoding="UTF-8"?>
-        <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-        <plist version="1.0">
-        <dict>
-          <key>method</key>
-          <string>app-store</string>
-          <key>signingStyle</key>
-          <string>manual</string>
-          <key>compileBitcode</key>
-          <false/>
-          <key>stripSwiftSymbols</key>
-          <true/>
-          <key>thinning</key>
-          <string>&lt;none&gt;</string>
-          <key>uploadBitcode</key>
-          <false/>
-          <key>uploadSymbols</key>
-          <false/>
-        </dict>
-        </plist>
-        EOF
-
-        # Export IPA from archive
-        echo "📱 Exporting IPA from archive..."
-        if xcodebuild -exportArchive \
-          -archivePath App.xcarchive \
-          -exportPath ./build \
-          -exportOptionsPlist export-options.plist \
-          -allowProvisioningUpdates; then
-          echo "✅ Archive export successful"
-        else
-          echo "⚠️ Archive export failed, attempting manual IPA creation..."
-          
-          # Fallback: manually create IPA from .app bundle
-          APP_PATH="App.xcarchive/Products/Applications/App.app"
-          if [ -d "$APP_PATH" ]; then
-            echo "📦 Creating IPA manually from .app bundle..."
-            mkdir -p ./build/Payload
-            cp -R "$APP_PATH" ./build/Payload/
-            cd ./build
-            zip -r App.ipa Payload/
-            cd ..
-            echo "✅ Manual IPA creation successful"
-          else
-            echo "❌ Error: App.app not found in archive"
-            echo "Archive contents:"
-            find App.xcarchive -name "*.app" -type d || echo "No .app bundles found"
-            exit 1
-          fi
-        fi
-
-        # Verify IPA was created and rename it
-        if [ -f "./build/App.ipa" ]; then
-          mv "./build/App.ipa" "./build/TravelBot-4.0.0.ipa"
-          echo "✅ IPA successfully created: TravelBot-4.0.0.ipa"
-        else
-          echo "❌ Error: IPA file not found after export"
-          echo "Build directory contents:"
-          ls -la ./build/ || echo "Build directory not found"
+        echo "📦 Creating IPA manually from .app bundle..."
+        
+        # Find the .app bundle in the archive
+        APP_PATH=$(find App.xcarchive -name "*.app" -type d | head -1)
+        
+        if [ -z "$APP_PATH" ]; then
+          echo "❌ Error: No .app bundle found in archive"
+          echo "Archive structure:"
+          find App.xcarchive -type d | head -10
           exit 1
         fi
-
+        
+        echo "✅ Found app bundle: $APP_PATH"
+        
+        # Create Payload directory and copy app
+        mkdir -p ./build/Payload
+        cp -R "$APP_PATH" ./build/Payload/
+        
+        # Create IPA by zipping Payload directory  
+        cd ./build
+        zip -r TravelBot-4.0.0.ipa Payload/
+        cd ..
+        
+        echo "✅ IPA manually created: TravelBot-4.0.0.ipa"
+        
         # List final build results
         echo "=== Final Build Results ==="
         ls -la ./build/
