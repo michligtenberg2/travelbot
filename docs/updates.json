@@ -218,5 +218,10 @@
     "date": "2025-07-18",
     "version": "0257a82",
     "description": "Merge pull request #25 from michligtenberg2/codex/improve-ui-structure-and-responsiveness"
+  },
+  {
+    "date": "2025-07-19",
+    "version": "a0931c5",
+    "description": "🔒 SECURITY: Remove hardcoded OpenAI API keys"
   }
 ]
