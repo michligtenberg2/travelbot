@@ -1,53 +1,64 @@
-# 🚗 Travelbot
+# 🧭 TravelBot v4.0 - Progressive Web App
 
 [![Docs](https://github.com/michligtenberg2/travelbot/actions/workflows/update-pages.yml/badge.svg)](https://github.com/michligtenberg2/travelbot/actions/workflows/update-pages.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Codespaces Ready](https://github.com/codespaces/badge.svg)](https://github.com/codespaces)
-[![Made with Kotlin & Flask](https://img.shields.io/badge/Made%20with-Kotlin%20%26%20Flask-blue)](#)
+[![Made with JavaScript & Flask](https://img.shields.io/badge/Made%20with-JavaScript%20%26%20Flask-blue)](#)
 
-**Travelbot** is een AI-reisgenoot die iedere 15 minuten een grappige opmerking maakt over je huidige locatie. Beschikbaar als Android app en moderne webapp.
+**TravelBot v4.0** is een geavanceerde AI-navigator die niet alleen sarcastische opmerkingen maakt, maar ook volledig functioneert als navigatiesysteem met real-time routing en intelligente locatiebewuste observaties.
 
-🆕 **Nieuw: WebApp Edition** - Gebruik TravelBot nu direct in je browser met GPS ondersteuning!
+🆕 **Nieuw: v4.0 Navigation Edition** - Volledig navigatiesysteem, slimme AI observaties, en kaart integratie!
 
 Lees dit document in het Engels via [README-en.md](README-en.md).
 
-## 🚀 Nieuwe Features in deze Release
+## 🚀 TravelBot v4.0 Features
 
-### 🌐 **WebApp Edition**
-- ✅ **Safari-compatible GPS webapp** - Werkt perfect op iOS/iPhone
-- ✅ **Real-time location tracking** - Geen app installatie nodig
+### 🧭 **Volledig Navigatiesysteem**
+- ✅ **Real-time routing** - OpenRouteService API integratie
+- ✅ **Turn-by-turn instructies** - Nederlandse spraakgeleiding  
+- ✅ **Interactive maps** - Leaflet.js route visualization
+- ✅ **Afstand & tijd updates** - Real-time voortgang tracking
+- ✅ **Aankomst detectie** - Automatische navigatie stop
+
+### 🤖 **Slimme AI Observaties**
+- ✅ **Context-bewuste opmerkingen** - Alleen interessante locaties
+- ✅ **POI detectie** - OpenStreetMap Overpass API
+- ✅ **Straatnaam analyse** - Grappige/interessante namen detectie
+- ✅ **File detectie** - Traffic jam observaties
+- ✅ **Anti-spam filtering** - Minimale, zinvolle opmerkingen
+
+### 🌐 **Progressive Web App**
+- ✅ **Safari-compatible** - Werkt perfect op iOS/iPhone
+- ✅ **Real-time GPS tracking** - Geen app installatie nodig
 - ✅ **Interactive AI chat** - Chat direct met je AI reisgenoot  
 - ✅ **Multiple personas** - Amsterdammer, Belg, Brabander, Jordanees
 - ✅ **Text-to-Speech** - Gesproken commentaren in browser
-- ✅ **PWA ready** - Installeerbaar als native app
-- ✅ **Background audio support** - Audio blijft spelen bij screen lock
+- ✅ **Installeerbaar** - Add to Home Screen functionaliteit
 
-### 🎭 **AI Character Voices (Preview)**
-- 🎤 **OpenAI TTS integration** - Studio-kwaliteit AI stemmen
-- 🎵 **Character-specific voices** - Unieke stem per persona
-- 🔊 **ElevenLabs voice cloning** - Custom character stemmen (enterprise)
-- 🎯 **Smart fallback** - Browser TTS backup
+### 🗺️ **Kaart & Visualisatie**
+- ✅ **Interactieve kaart** - Leaflet.js implementatie
+- ✅ **Route rendering** - Real-time route weergave
+- ✅ **Locatie markers** - Current position tracking
+- ✅ **Mobile-optimized** - Touch-friendly interface
 
-### 💬 **Interactive Features**  
-- 🗨️ **Real-time chat interface** - Floating chat tijdens reis
-- 📍 **Location-based conversations** - Vragen over omgeving
-- 📱 **Mobile-optimized** - Touch-friendly interface
-- 🎨 **Responsive design** - Werkt op alle schermformaten
+## 📦 Installatie & Gebruik
 
-### 🏢 **Enterprise Edition**
-- 📊 **Real-time monitoring dashboard** - Live system metrics
-- ⚡ **Advanced error handling** - Smart recovery strategies
-- 🧪 **Automated testing framework** - Quality assurance
-- 📈 **Performance analytics** - FPS, memory, API tracking
+### 🌐 **Progressive Web App (Aanbevolen)**
 
-## 📦 Installatie
-
-### 🌐 WebApp (Aanbevolen - Nieuw!)
-
-**Quick Start:**
+**Direct gebruiken:**
 ```bash
-cd webapp
-python3 -m http.server 8080
+# Lokaal draaien
+cd webapp/
+python3 -m http.server 8000
+
+# Open in browser
+http://localhost:8000
+```
+
+**Of installeren als app:**
+1. 📱 Open TravelBot in Chrome/Safari
+2. 📲 "Add to Home Screen" of "Install App"
+3. 🎯 Gebruik als native app!
 # Open: http://localhost:8080
 ```
 
@@ -56,53 +67,58 @@ python3 -m http.server 8080
 - ✅ Werkt op iPhone Safari  
 - ✅ Direct GPS ondersteuning
 - ✅ Installeerbaar als PWA
+## 🚀 Installatie & Setup
+
+### 🌐 Progressive Web App v4.0
+
+1. **Clone de repository:**
+   ```bash
+   git clone https://github.com/michligtenberg2/travelbot.git
+   cd travelbot
+   ```
+
+2. **Start de backend (optioneel voor lokale ontwikkeling):**
+   ```bash
+   cd backend
+   pip install flask requests
+   export OPENAI_API_KEY=sk-xxx
+   python app.py
+   ```
+
+3. **Open de webapp:**
+   - **Production**: [https://travelbot-2k7x.onrender.com/](https://travelbot-2k7x.onrender.com/)
+   - **Local development**: `http://localhost:5000`
+
+4. **Installeer als PWA**: 
+   - Klik op "Toevoegen aan startscherm" (mobiel)
+   - Of "App installeren" (desktop) voor volledige app-ervaring
+
+### 🗝️ API Setup
+- Zet je OpenAI API-sleutel in je omgeving voor AI persona's
+- Gebruik de gehoste backend op Render voor gemak
 - ⚠️ **Let op**: HTTPS vereist voor GPS op mobiel
 
 [→ Volledige WebApp Setup Guide](webapp/README.md)
 
-### � Android App
-
-1. Zorg voor **Python 3.11+** en een Android-telefoon met **Android 8+**.
-2. Kloon deze repository en installeer de vereisten:
-
-   ```bash
-   git clone https://github.com/michligtenberg2/travelbot.git
-   cd travelbot
-   pip install flask requests
-   ```
-
-3. Zet je OpenAI API-sleutel in je omgeving:
-
-   ```bash
-   export OPENAI_API_KEY=sk-xxx
-   ```
-
-4. De backend is nu gehost op Render en bereikbaar via [https://travelbot-2k7x.onrender.com/](https://travelbot-2k7x.onrender.com/). Lokale hosting is niet meer nodig.
-
-5. Open de map `app/` in Android Studio, bouw de app en installeer de APK op je telefoon.
-6. Vul in de app het adres van je Render-backend in en je bent klaar!
-
 ## 🔧 Gebruik
 
-### 🌐 WebApp (Nieuw!)
+### 🌐 TravelBot v4.0 Web App
 
-1. **Start lokaal** (development):
-   ```bash
-   cd webapp
-   python3 -m http.server 8080
-   ```
+1. **Open de webapp:**
+   - **Production**: [https://travelbot-2k7x.onrender.com/](https://travelbot-2k7x.onrender.com/)
+   - **Local**: `http://localhost:8080` (na `python3 -m http.server 8080` in webapp/)
 
-2. **Open je browser** naar `http://localhost:8080`
+2. **Sta GPS-toegang toe** en kies je AI reisgenoot
 
-3. **Sta GPS-toegang toe** en kies je AI reisgenoot
+3. **Nieuwe v4.0 functies:**
+   - 🗺️ **Navigatie systeem** - Routeplanning met turn-by-turn instructies
+   - 🧠 **Slimme observaties** - Contextbewuste POI detectie
+   - 📍 **Interactieve kaarten** - Leaflet.js integratie
+   - 🔄 **Real-time tracking** - Live positie-updates
 
-4. **Start de reis** - TravelBot geeft automatisch commentaar elke 15 minuten
+4. **Start de reis** - TravelBot geeft automatisch commentaar + navigatie
 
-**Mobile gebruikers**: Voor HTTPS/GPS ondersteuning, gebruik een tool zoals ngrok of host op een server.
-
-### 📱 Android App
-
-Open de app, selecteer je persona en **Travelbot** begint automatisch met het geven van commentaar op je reis.
+**Mobile gebruikers**: Voor HTTPS/GPS ondersteuning wordt de Render-hosting aanbevolen.
 
 ### 🎭 Persona's
 
@@ -136,25 +152,29 @@ Meer uitleg vind je op de [GitHub Pages site](https://michligtenberg2.github.io/
 
 ### 📖 Project Gidsen
 
-- **[WebApp Setup Guide](webapp/README.md)** - Volledige installatie en configuratie voor webapp
-- **[Gebruikershandleiding](docs/gebruikershandleiding.md)** - Android app gebruikershandleiding
+- **[WebApp v4.0 Guide](webapp/README.md)** - Complete Progressive Web App documentatie
+- **[Navigatie Systeem](docs/navigation.md)** - v4.0 navigatie functies uitleg
 - **[English Documentation](README-en.md)** - English version of this README
 
 ## 📂 Projectstructuur
 
+## 📂 Project Structuur
+
 ```
-webapp/             🌐 Modern webapp met GPS & AI chat
-  ├── main.js       ⚡ Core app logic & location tracking
+webapp/             🌐 Progressive Web App v4.0
+  ├── main.js       ⚡ Core app logic & navigation system
+  ├── navigation.js 🧭 Route planning & turn-by-turn 
+  ├── smart-observations.js 🧠 Context-aware POI detection
   ├── tts.js        🎵 Text-to-speech & voice management
   ├── location.js   📍 GPS tracking & location services
-  └── chat.js       💬 Interactive chat interface
+  ├── chat.js       💬 Interactive chat interface
+  ├── index.html    📄 PWA interface with Leaflet maps
+  ├── style.css     🎨 Responsive design & navigation UI
+  └── manifest.json 📱 PWA configuration
 
-backend/            🖥️ Flask API die reacties genereert
+backend/            🖥️ Flask API server (shared)
   ├── app.py        🐍 Main Flask server
   └── personas/     🎭 Character definitions
-
-app/                📱 Android-app geschreven in Kotlin
-  └── src/          🏗️ Android source code
 
 docs/               📚 Documentatie (GitHub Pages)
 ```
@@ -163,7 +183,7 @@ docs/               📚 Documentatie (GitHub Pages)
 
 ### Veelvoorkomende problemen en oplossingen
 
-#### 🌐 WebApp Issues
+#### 🌐 Progressive Web App Issues
 
 **GPS werkt niet:**
 - ✅ Zorg voor HTTPS verbinding (vereist voor GPS)  
@@ -180,14 +200,17 @@ docs/               📚 Documentatie (GitHub Pages)
 - ✅ Controleer internetverbinding  
 - ✅ Verify OpenAI API key is correct
 
-#### 📱 Android App Issues
+**Navigatie werkt niet (v4.0):**
+- ✅ Controleer OpenRouteService API toegang
+- ✅ Verifieer GPS-precisie voor routeberekening
+- ✅ Test internetverbinding voor kaartdata
 
 #### Backend connectie problemen
 - **Probleem**: App kan geen verbinding maken met de backend
 - **Oplossing**: 
-  - Controleer of de backend URL correct is ingesteld in de app instellingen
-  - Voor lokale ontwikkeling: gebruik `http://10.0.2.2:5000` (Android emulator) of je lokale IP-adres
-  - Voor productie: gebruik de volledige HTTPS URL van je server
+  - Gebruik production URL: `https://travelbot-2k7x.onrender.com/`
+  - Voor lokale ontwikkeling: `http://localhost:5000`
+  - Controleer CORS instellingen
 
 #### API sleutel fouten
 - **Probleem**: "API key is required" foutmelding
@@ -197,7 +220,7 @@ docs/               📚 Documentatie (GitHub Pages)
   - Controleer dat de API sleutel geldig is en voldoende credits heeft
 
 #### Cache problemen
-- **Probleem**: Oude reacties worden getoond
+- **Probleem**: Oude reacties of kaartdata worden getoond
 - **Oplossing**:
   - Ga naar app instellingen en klik op "Cache Wissen"
   - De app gebruikt nu Room database voor verbeterde caching
@@ -274,21 +297,16 @@ const audioStream = await openai.audio.speech.create({
 ### 🗓️ Planned (V3.0)
 - [ ] Multi-language support (EN, DE, FR)
 - [ ] Voice command interaction
+- [ ] Multi-language support
 - [ ] Trip planning integration
 - [ ] Social sharing features
-
-#### Android build problemen
-- **Probleem**: App compileert niet
-- **Oplossing**:
-  - Controleer dat je Android SDK 34 hebt geïnstalleerd
-  - Clean en rebuild het project
-  - Zorg dat alle Gradle dependencies up-to-date zijn
+- [ ] Offline map caching
 
 ### Debug tips
 - Schakel verbose logging in voor meer gedetailleerde informatie
-- Gebruik Android Studio's logcat om app logs te bekijken
-- Test eerst met de lokale backend voordat je naar productie gaat
-- Controleer de Swagger documentatie op `/apidocs` voor API details
+- Gebruik browser developer tools voor debugging
+- Test GPS functionality met HTTPS verbinding
+- Controleer de API documentatie op `/apidocs` voor backend details
 
 ### Contact
 Als je een bug vindt of hulp nodig hebt, maak dan een issue aan in de GitHub repository.
