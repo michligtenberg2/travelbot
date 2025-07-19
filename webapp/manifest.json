@@ -1,0 +1,77 @@
+{
+  "name": "TravelBot WebApp",
+  "short_name": "TravelBot",
+  "description": "AI reisgenoot die grappige opmerkingen maakt over je locatie",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#007bff",
+  "background_color": "#ffffff",
+  "categories": ["travel", "navigation", "entertainment"],
+  "lang": "nl",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚗</text></svg>",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' fill='%23007bff'/><text x='256' y='320' font-size='300' text-anchor='middle' fill='white'>🚗</text></svg>",
+      "sizes": "512x512",
+      "type": "image/svg+xml"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 390 844'><rect width='390' height='844' fill='%23007bff'/><text x='195' y='200' font-size='40' text-anchor='middle' fill='white'>TravelBot</text><text x='195' y='400' font-size='80' text-anchor='middle' fill='white'>🚗</text><text x='195' y='600' font-size='20' text-anchor='middle' fill='white'>GPS Travel Companion</text></svg>",
+      "sizes": "390x844",
+      "type": "image/svg+xml",
+      "form_factor": "narrow",
+      "label": "TravelBot main screen"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Start Reis",
+      "short_name": "Start",
+      "description": "Start een nieuwe TravelBot reis",
+      "url": "/?action=start",
+      "icons": [
+        {
+          "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Instellingen",
+      "short_name": "Settings",
+      "description": "Open TravelBot instellingen",
+      "url": "/?panel=settings",
+      "icons": [
+        {
+          "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+  "prefer_related_applications": false,
+  "scope": "/",
+  "id": "travelbot-webapp",
+  "launch_handler": {
+    "client_mode": "focus-existing"
+  },
+  "handle_links": "preferred",
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  "protocol_handlers": [
+    {
+      "protocol": "geo",
+      "url": "/?lat=%s&lon=%s"
+    }
+  ]
+}

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>🚗 TravelBot WebApp</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#007bff">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚗</text></svg>">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <h1>🚗 TravelBot</h1>
+            <div class="status-indicator" id="statusIndicator">
+                <span id="statusText">Klaar om te starten</span>
+            </div>
+        </header>
+
+        <!-- Main Controls -->
+        <main class="main-content">
+            <!-- GPS Status -->
+            <div class="gps-status" id="gpsStatus">
+                <div class="location-info" id="locationInfo">
+                    📍 Locatie: <span id="currentLocation">Nog geen locatie</span>
+                </div>
+                <div class="coordinates" id="coordinates">
+                    🌐 GPS: <span id="currentCoordinates">--°, --°</span>
+                </div>
+            </div>
+
+            <!-- Start Button -->
+            <div class="start-section">
+                <button id="startButton" class="start-btn">
+                    📍 Start Reis
+                </button>
+                <p class="start-info">Klik om GPS te activeren en TravelBot te starten</p>
+            </div>
+
+            <!-- Bot Response -->
+            <div class="bot-response" id="botResponse" style="display: none;">
+                <div class="response-header">
+                    <h3>🤖 TravelBot zegt:</h3>
+                    <button id="playAudio" class="audio-btn" title="Speel opnieuw af">🔊</button>
+                </div>
+                <div class="response-text" id="responseText">
+                    Wacht op eerste reactie...
+                </div>
+            </div>
+
+            <!-- Persona Selector -->
+            <div class="persona-section">
+                <label for="personaSelect">🎭 Kies persona:</label>
+                <select id="personaSelect">
+                    <option value="Jordanees">Heino (Jordanees)</option>
+                    <option value="Belg">Neerslachtige Belg</option>
+                    <option value="Brabander">Sergio Herman</option>
+                </select>
+            </div>
+
+            <!-- Travel Log -->
+            <div class="log-section">
+                <div class="log-header">
+                    <h3>📚 Reis Log</h3>
+                    <button id="clearLog" class="clear-btn">Wis Log</button>
+                </div>
+                <div class="log-container" id="logContainer">
+                    <div class="log-entry">
+                        <small>Welkom bij TravelBot webapp! Activeer GPS om te beginnen.</small>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Settings Panel -->
+        <div class="settings-panel" id="settingsPanel">
+            <h3>⚙️ Instellingen</h3>
+            
+            <div class="setting-group">
+                <label for="backendUrl">Backend URL:</label>
+                <input type="url" id="backendUrl" value="https://travelbot-2k7x.onrender.com" placeholder="https://jouw-backend.com">
+                <small>Standaard: Render hosted backend</small>
+            </div>
+
+            <div class="setting-group">
+                <label for="updateInterval">Update Interval (minuten):</label>
+                <input type="number" id="updateInterval" min="1" max="60" value="15">
+                <small>Hoe vaak TravelBot reageert (1-60 min)</small>
+            </div>
+
+            <div class="setting-group">
+                <label>
+                    <input type="checkbox" id="simulationMode"> 
+                    Simulatie Modus
+                </label>
+                <small>Test zonder echte GPS (gebruikt mock locaties)</small>
+            </div>
+
+            <div class="setting-group">
+                <label>
+                    <input type="checkbox" id="enableSpeech" checked> 
+                    Spraak Ingeschakeld
+                </label>
+                <small>TTS uitschakelen op Safari (experimenteel)</small>
+            </div>
+
+            <button id="saveSettings" class="save-btn">Opslaan</button>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <button id="navHome" class="nav-btn active">🏠 Home</button>
+            <button id="navSettings" class="nav-btn">⚙️ Instellingen</button>
+            <button id="navMap" class="nav-btn">🗺️ Kaart</button>
+        </nav>
+    </div>
+
+    <!-- Safari HTTPS Warning Modal -->
+    <div id="httpsModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h3>⚠️ HTTPS Vereist</h3>
+            <p>GPS werkt alleen op HTTPS voor beveiliging. Voor lokale ontwikkeling:</p>
+            <ul>
+                <li>Gebruik <code>mkcert</code> voor lokale SSL certificaten</li>
+                <li>Of gebruik <code>ngrok</code> voor HTTPS tunnel</li>
+                <li>Of test op een HTTPS gehoste versie</li>
+            </ul>
+            <button id="closeHttpsModal" class="btn">Begrepen</button>
+        </div>
+    </div>
+
+    <script src="travelbot_engine.js"></script>
+    <script src="location.js"></script>
+    <script src="tts.js"></script>
+    <script src="mock.js"></script>
+    <script src="main.js"></script>
+
+    <script>
+        // Register Service Worker for PWA
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('serviceWorker.js')
+                .then(reg => console.log('Service Worker registered'))
+                .catch(err => console.log('Service Worker registration failed'));
+        }
+    </script>
+</body>
+</html>
