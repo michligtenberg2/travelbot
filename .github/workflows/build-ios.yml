@@ -40,8 +40,17 @@ jobs:
     - name: Build iOS project with Xcode
       run: |
         cd travelbot-ipa-builder/ios/App
-        # Build the app without signing
-        xcodebuild -workspace App.xcworkspace \
+
+        # Verify workspace exists
+        if [ ! -d "App.xcworkspace" ]; then
+          echo "❌ Error: App.xcworkspace not found. Capacitor sync may have failed."
+          exit 1
+        fi
+
+        # Build and archive the app without signing
+        echo "🏗️ Building and archiving iOS app..."
+        xcodebuild clean archive \
+          -workspace App.xcworkspace \
           -scheme App \
           -configuration Release \
           -destination generic/platform=iOS \
@@ -49,71 +58,93 @@ jobs:
           CODE_SIGN_IDENTITY="" \
           CODE_SIGNING_REQUIRED=NO \
           CODE_SIGNING_ALLOWED=NO \
-          archive
+          -allowProvisioningUpdates
 
     - name: Create unsigned IPA
       run: |
         cd travelbot-ipa-builder/ios/App
-        # Create export options
+
+        # Verify required files exist
+        if [ ! -d "App.xcarchive" ]; then
+          echo "❌ Error: App.xcarchive not found. Previous build step may have failed."
+          exit 1
+        fi
+
+        if [ ! -d "App.xcworkspace" ]; then
+          echo "❌ Error: App.xcworkspace not found."
+          exit 1
+        fi
+
+        # Create build directory
+        mkdir -p ./build
+
+        # Create single export options plist for unsigned distribution
         cat > export-options.plist << EOF
         <?xml version="1.0" encoding="UTF-8"?>
         <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
         <plist version="1.0">
         <dict>
-            <key>method</key>
-            <string>development</string>
-            <key>signingStyle</key>
-            <string>manual</string>
-        </dict>
-        </plist>
-        EOF
-        
-        # Export IPA
-        xcodebuild -exportArchive \
-          -archivePath App.xcarchive \
-          -exportPath ./build \
-          -exportOptionsPlist export-options.plist \
-          -allowProvisioningUpdates
-        
-        # Create export options for development
-        cat > exportOptions.plist << EOF
-        <?xml version="1.0" encoding="UTF-8"?>
-        <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-        <plist version="1.0">
-        <dict>
           <key>method</key>
-          <string>development</string>
+          <string>app-store</string>
+          <key>signingStyle</key>
+          <string>manual</string>
           <key>compileBitcode</key>
           <false/>
           <key>stripSwiftSymbols</key>
           <true/>
           <key>thinning</key>
           <string>&lt;none&gt;</string>
+          <key>uploadBitcode</key>
+          <false/>
+          <key>uploadSymbols</key>
+          <false/>
         </dict>
         </plist>
         EOF
-        
-        # Build and archive
-        xcodebuild clean archive \
-          -project TravelBot.xcodeproj \
-          -scheme TravelBot \
-          -configuration Release \
-          -archivePath build/TravelBot.xcarchive \
-          CODE_SIGN_IDENTITY="" \
-          CODE_SIGNING_REQUIRED=NO \
-          CODE_SIGNING_ALLOWED=NO
-        
-        # Export IPA
-        xcodebuild -exportArchive \
-          -archivePath build/TravelBot.xcarchive \
-          -exportOptionsPlist exportOptions.plist \
-          -exportPath build/
+
+        # Export IPA from archive
+        echo "📱 Exporting IPA from archive..."
+        if xcodebuild -exportArchive \
+          -archivePath App.xcarchive \
+          -exportPath ./build \
+          -exportOptionsPlist export-options.plist \
+          -allowProvisioningUpdates; then
+          echo "✅ Archive export successful"
+        else
+          echo "⚠️ Archive export failed, attempting manual IPA creation..."
           
-        # Rename IPA file
-        mv build/TravelBot.ipa build/TravelBot-4.0.0.ipa 2>/dev/null || true
-        
-        # List build results
-        ls -la build/
+          # Fallback: manually create IPA from .app bundle
+          APP_PATH="App.xcarchive/Products/Applications/App.app"
+          if [ -d "$APP_PATH" ]; then
+            echo "📦 Creating IPA manually from .app bundle..."
+            mkdir -p ./build/Payload
+            cp -R "$APP_PATH" ./build/Payload/
+            cd ./build
+            zip -r App.ipa Payload/
+            cd ..
+            echo "✅ Manual IPA creation successful"
+          else
+            echo "❌ Error: App.app not found in archive"
+            echo "Archive contents:"
+            find App.xcarchive -name "*.app" -type d || echo "No .app bundles found"
+            exit 1
+          fi
+        fi
+
+        # Verify IPA was created and rename it
+        if [ -f "./build/App.ipa" ]; then
+          mv "./build/App.ipa" "./build/TravelBot-4.0.0.ipa"
+          echo "✅ IPA successfully created: TravelBot-4.0.0.ipa"
+        else
+          echo "❌ Error: IPA file not found after export"
+          echo "Build directory contents:"
+          ls -la ./build/ || echo "Build directory not found"
+          exit 1
+        fi
+
+        # List final build results
+        echo "=== Final Build Results ==="
+        ls -la ./build/
 
     - name: Upload IPA artifact
       uses: actions/upload-artifact@v4
@@ -123,7 +154,7 @@ jobs:
           travelbot-ipa-builder/ios/App/build/*.ipa
         retention-days: 30
 
-    - name: List build results  
+    - name: List build results
       run: |
         echo "=== Build Results ==="
         ls -la travelbot-ipa-builder/ios/App/build/ || echo "Build directory not found"
