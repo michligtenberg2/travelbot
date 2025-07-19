@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧪 TravelBot WebApp Test Suite</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px 5px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .test-button:hover {
+            background: #0056b3;
+        }
+        .test-result {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .info { background: #d1ecf1; color: #0c5460; }
+        .warning { background: #fff3cd; color: #856404; }
+        
+        h1 { color: #007bff; }
+        h2 { color: #28a745; }
+        code { background: #f8f9fa; padding: 2px 4px; border-radius: 3px; }
+    </style>
+</head>
+<body>
+    <h1>🧪 TravelBot WebApp Test Suite</h1>
+    <p>Test alle functionaliteiten van de TravelBot webapp om te controleren of alles correct werkt.</p>
+
+    <!-- Browser Capability Tests -->
+    <div class="test-section">
+        <h2>🌐 Browser Ondersteuning</h2>
+        <button class="test-button" onclick="testBrowserSupport()">Test Browser Features</button>
+        <div id="browserResults"></div>
+    </div>
+
+    <!-- HTTPS & Security Tests -->
+    <div class="test-section">
+        <h2>🔒 Beveiliging & HTTPS</h2>
+        <button class="test-button" onclick="testSecurity()">Test Security Context</button>
+        <div id="securityResults"></div>
+    </div>
+
+    <!-- GPS & Location Tests -->
+    <div class="test-section">
+        <h2>📍 GPS & Locatie</h2>
+        <button class="test-button" onclick="testGPS()">Test GPS Permissies</button>
+        <button class="test-button" onclick="testMockGPS()">Test Mock GPS</button>
+        <div id="gpsResults"></div>
+    </div>
+
+    <!-- Speech & TTS Tests -->
+    <div class="test-section">
+        <h2>🗣️ Text-to-Speech</h2>
+        <button class="test-button" onclick="testTTS()">Test TTS Basic</button>
+        <button class="test-button" onclick="testTTSVoices()">Test Nederlandse Stemmen</button>
+        <div id="ttsResults"></div>
+    </div>
+
+    <!-- Backend API Tests -->
+    <div class="test-section">
+        <h2>🔗 Backend API</h2>
+        <input type="url" id="backendUrl" value="https://travelbot-2k7x.onrender.com" placeholder="Backend URL">
+        <button class="test-button" onclick="testBackendAPI()">Test Backend Verbinding</button>
+        <button class="test-button" onclick="testAPICall()">Test Comment API</button>
+        <div id="apiResults"></div>
+    </div>
+
+    <!-- PWA & Service Worker Tests -->
+    <div class="test-section">
+        <h2>📱 PWA & Offline</h2>
+        <button class="test-button" onclick="testPWA()">Test PWA Features</button>
+        <button class="test-button" onclick="testServiceWorker()">Test Service Worker</button>
+        <div id="pwaResults"></div>
+    </div>
+
+    <!-- Performance Tests -->
+    <div class="test-section">
+        <h2>⚡ Performance</h2>
+        <button class="test-button" onclick="testPerformance()">Test Load Times</button>
+        <div id="performanceResults"></div>
+    </div>
+
+    <!-- Manual Tests -->
+    <div class="test-section">
+        <h2>👆 Handmatige Tests</h2>
+        <p>Deze tests vereisen handmatige verificatie:</p>
+        <ul>
+            <li><a href="index.html" target="_blank">🚗 Open TravelBot WebApp</a></li>
+            <li>Test "Start Reis" knop (vereist user gesture)</li>
+            <li>Test persona selector</li>
+            <li>Test instellingen panel</li>
+            <li>Test simulatie modus</li>
+            <li>Test responsive design op mobiel</li>
+            <li>Test PWA installatie (Add to Home Screen)</li>
+        </ul>
+    </div>
+
+    <script>
+        // Browser Support Tests
+        function testBrowserSupport() {
+            const results = document.getElementById('browserResults');
+            results.innerHTML = '<div class="info">🔍 Testing browser features...</div>';
+            
+            const tests = [
+                {
+                    name: 'Geolocation API',
+                    test: () => 'geolocation' in navigator,
+                    required: true
+                },
+                {
+                    name: 'Web Speech API',
+                    test: () => 'speechSynthesis' in window,
+                    required: true
+                },
+                {
+                    name: 'Service Worker',
+                    test: () => 'serviceWorker' in navigator,
+                    required: true
+                },
+                {
+                    name: 'Local Storage',
+                    test: () => 'localStorage' in window,
+                    required: true
+                },
+                {
+                    name: 'Fetch API',
+                    test: () => 'fetch' in window,
+                    required: true
+                },
+                {
+                    name: 'Modern JavaScript (ES6)',
+                    test: () => {
+                        try {
+                            eval('const test = () => true; test()');
+                            return true;
+                        } catch (e) {
+                            return false;
+                        }
+                    },
+                    required: true
+                }
+            ];
+
+            let html = '';
+            let allPassed = true;
+
+            tests.forEach(test => {
+                const passed = test.test();
+                const className = passed ? 'success' : (test.required ? 'error' : 'warning');
+                const icon = passed ? '✅' : '❌';
+                const status = passed ? 'SUPPORTED' : 'NOT SUPPORTED';
+                
+                html += `<div class="${className}">${icon} ${test.name}: ${status}</div>`;
+                
+                if (!passed && test.required) {
+                    allPassed = false;
+                }
+            });
+
+            // Browser detection
+            const userAgent = navigator.userAgent;
+            const browser = getBrowserName(userAgent);
+            
+            html += `<div class="info">🌐 Browser: ${browser}</div>`;
+            html += `<div class="info">📱 Platform: ${navigator.platform}</div>`;
+            html += `<div class="info">🔧 User Agent: ${userAgent}</div>`;
+
+            if (allPassed) {
+                html += '<div class="success">🎉 All required features supported!</div>';
+            } else {
+                html += '<div class="error">⚠️ Some required features missing!</div>';
+            }
+
+            results.innerHTML = html;
+        }
+
+        function getBrowserName(userAgent) {
+            if (userAgent.indexOf('Chrome') > -1 && userAgent.indexOf('Edge') === -1) return 'Chrome';
+            if (userAgent.indexOf('Safari') > -1 && userAgent.indexOf('Chrome') === -1) return 'Safari';
+            if (userAgent.indexOf('Firefox') > -1) return 'Firefox';
+            if (userAgent.indexOf('Edge') > -1) return 'Edge';
+            return 'Unknown';
+        }
+
+        // Security Tests
+        function testSecurity() {
+            const results = document.getElementById('securityResults');
+            results.innerHTML = '<div class="info">🔒 Testing security context...</div>';
+            
+            const isHTTPS = location.protocol === 'https:';
+            const isLocalhost = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+            const isSecureContext = window.isSecureContext;
+
+            let html = '';
+            
+            html += `<div class="${isHTTPS ? 'success' : 'warning'}">
+                ${isHTTPS ? '✅' : '⚠️'} Protocol: ${location.protocol}
+            </div>`;
+            
+            html += `<div class="${isSecureContext ? 'success' : 'error'}">
+                ${isSecureContext ? '✅' : '❌'} Secure Context: ${isSecureContext}
+            </div>`;
+            
+            html += `<div class="info">🏠 Hostname: ${location.hostname}</div>`;
+            html += `<div class="info">🌐 Origin: ${location.origin}</div>`;
+
+            if (isSecureContext) {
+                html += '<div class="success">🎉 GPS should work in this context!</div>';
+            } else {
+                html += '<div class="error">❌ GPS will NOT work - HTTPS required!</div>';
+            }
+
+            results.innerHTML = html;
+        }
+
+        // GPS Tests
+        async function testGPS() {
+            const results = document.getElementById('gpsResults');
+            results.innerHTML = '<div class="info">📍 Testing GPS permissions...</div>';
+            
+            try {
+                const position = await new Promise((resolve, reject) => {
+                    navigator.geolocation.getCurrentPosition(resolve, reject, {
+                        timeout: 10000,
+                        enableHighAccuracy: true,
+                        maximumAge: 60000
+                    });
+                });
+
+                let html = '<div class="success">✅ GPS Permission Granted!</div>';
+                html += `<div class="success">📍 Latitude: ${position.coords.latitude.toFixed(6)}</div>`;
+                html += `<div class="success">📍 Longitude: ${position.coords.longitude.toFixed(6)}</div>`;
+                html += `<div class="info">🎯 Accuracy: ±${Math.round(position.coords.accuracy)}m</div>`;
+                
+                if (position.coords.altitude !== null) {
+                    html += `<div class="info">⛰️ Altitude: ${Math.round(position.coords.altitude)}m</div>`;
+                }
+                
+                results.innerHTML = html;
+            } catch (error) {
+                let html = '<div class="error">❌ GPS Test Failed!</div>';
+                html += `<div class="error">Error: ${error.message}</div>`;
+                
+                switch (error.code) {
+                    case 1:
+                        html += '<div class="warning">💡 Tip: Click allow location access</div>';
+                        break;
+                    case 2:
+                        html += '<div class="warning">💡 Tip: Go outside for better GPS signal</div>';
+                        break;
+                    case 3:
+                        html += '<div class="warning">💡 Tip: Check internet connection</div>';
+                        break;
+                }
+                
+                results.innerHTML = html;
+            }
+        }
+
+        function testMockGPS() {
+            const results = document.getElementById('gpsResults');
+            results.innerHTML += '<div class="info">🎭 Testing Mock GPS provider...</div>';
+            
+            // Test if mock provider loads
+            const script = document.createElement('script');
+            script.src = 'mock.js';
+            script.onload = () => {
+                if (window.MockLocationProvider) {
+                    const mock = new MockLocationProvider();
+                    mock.start();
+                    const position = mock.getNextLocation();
+                    
+                    let html = '<div class="success">✅ Mock GPS Working!</div>';
+                    html += `<div class="info">🎭 Mock Location: ${position.mockData.name}</div>`;
+                    html += `<div class="info">📍 Coordinates: ${position.coords.latitude.toFixed(4)}, ${position.coords.longitude.toFixed(4)}</div>`;
+                    
+                    results.innerHTML += html;
+                } else {
+                    results.innerHTML += '<div class="error">❌ Mock GPS provider not loaded</div>';
+                }
+            };
+            script.onerror = () => {
+                results.innerHTML += '<div class="error">❌ Failed to load mock.js</div>';
+            };
+            document.head.appendChild(script);
+        }
+
+        // TTS Tests
+        async function testTTS() {
+            const results = document.getElementById('ttsResults');
+            results.innerHTML = '<div class="info">🗣️ Testing Text-to-Speech...</div>';
+            
+            if (!('speechSynthesis' in window)) {
+                results.innerHTML = '<div class="error">❌ Speech Synthesis not supported</div>';
+                return;
+            }
+
+            try {
+                const utterance = new SpeechSynthesisUtterance('Test van Text-to-Speech.');
+                utterance.lang = 'nl-NL';
+                utterance.rate = 1.0;
+                utterance.pitch = 1.0;
+
+                speechSynthesis.speak(utterance);
+                
+                let html = '<div class="success">✅ TTS Test Started!</div>';
+                html += '<div class="info">🔊 Should hear: "Test van Text-to-Speech"</div>';
+                html += `<div class="info">📊 Speaking: ${speechSynthesis.speaking}</div>`;
+                html += `<div class="info">⏸️ Paused: ${speechSynthesis.paused}</div>`;
+                
+                results.innerHTML = html;
+            } catch (error) {
+                results.innerHTML = `<div class="error">❌ TTS Error: ${error.message}</div>`;
+            }
+        }
+
+        function testTTSVoices() {
+            const results = document.getElementById('ttsResults');
+            results.innerHTML += '<div class="info">🎤 Loading available voices...</div>';
+            
+            const loadVoices = () => {
+                const voices = speechSynthesis.getVoices();
+                
+                if (voices.length === 0) {
+                    results.innerHTML += '<div class="warning">⚠️ No voices loaded yet, try again</div>';
+                    return;
+                }
+
+                const dutchVoices = voices.filter(voice => 
+                    voice.lang.toLowerCase().includes('nl')
+                );
+
+                let html = `<div class="info">🎤 Total voices: ${voices.length}</div>`;
+                html += `<div class="info">🇳🇱 Dutch voices: ${dutchVoices.length}</div>`;
+                
+                if (dutchVoices.length > 0) {
+                    html += '<div class="success">✅ Dutch voices available:</div>';
+                    dutchVoices.forEach(voice => {
+                        html += `<div class="info">• ${voice.name} (${voice.lang})</div>`;
+                    });
+                } else {
+                    html += '<div class="warning">⚠️ No Dutch voices found, using fallback</div>';
+                }
+                
+                results.innerHTML += html;
+            };
+
+            // Voices might not be loaded immediately
+            if (speechSynthesis.getVoices().length > 0) {
+                loadVoices();
+            } else {
+                speechSynthesis.addEventListener('voiceschanged', loadVoices);
+                setTimeout(() => {
+                    if (speechSynthesis.getVoices().length === 0) {
+                        results.innerHTML += '<div class="error">❌ Voices failed to load</div>';
+                    }
+                }, 3000);
+            }
+        }
+
+        // Backend API Tests
+        async function testBackendAPI() {
+            const results = document.getElementById('apiResults');
+            const backendUrl = document.getElementById('backendUrl').value;
+            
+            results.innerHTML = '<div class="info">🔗 Testing backend connection...</div>';
+            
+            try {
+                const response = await fetch(backendUrl, {
+                    method: 'GET',
+                    mode: 'cors'
+                });
+                
+                let html = `<div class="success">✅ Backend reachable: ${response.status}</div>`;
+                html += `<div class="info">🌐 URL: ${backendUrl}</div>`;
+                html += `<div class="info">📊 Status: ${response.status} ${response.statusText}</div>`;
+                
+                // Check if it's the TravelBot backend
+                const contentType = response.headers.get('content-type');
+                if (contentType && contentType.includes('text/html')) {
+                    html += '<div class="info">📄 Looks like a web page (Flask default)</div>';
+                }
+                
+                results.innerHTML = html;
+            } catch (error) {
+                let html = '<div class="error">❌ Backend connection failed!</div>';
+                html += `<div class="error">Error: ${error.message}</div>';
+                html += '<div class="warning">💡 Check CORS settings and URL</div>';
+                results.innerHTML = html;
+            }
+        }
+
+        async function testAPICall() {
+            const results = document.getElementById('apiResults');
+            const backendUrl = document.getElementById('backendUrl').value;
+            
+            results.innerHTML += '<div class="info">🤖 Testing comment API...</div>';
+            
+            try {
+                const response = await fetch(`${backendUrl}/comment`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-API-KEY': 'test-key'
+                    },
+                    body: JSON.stringify({
+                        lat: 52.3676,
+                        lon: 4.9041,
+                        style: 'Jordanees'
+                    })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    let html = '<div class="success">✅ API Call Successful!</div>';
+                    html += `<div class="success">🤖 Response: "${data.text}"</div>`;
+                    results.innerHTML += html;
+                } else {
+                    results.innerHTML += `<div class="error">❌ API returned: ${response.status}</div>`;
+                }
+            } catch (error) {
+                results.innerHTML += `<div class="error">❌ API call failed: ${error.message}</div>`;
+            }
+        }
+
+        // PWA Tests
+        async function testPWA() {
+            const results = document.getElementById('pwaResults');
+            results.innerHTML = '<div class="info">📱 Testing PWA features...</div>';
+            
+            let html = '';
+
+            // Test manifest
+            try {
+                const response = await fetch('/manifest.json');
+                if (response.ok) {
+                    const manifest = await response.json();
+                    html += '<div class="success">✅ Manifest loaded</div>';
+                    html += `<div class="info">📱 App name: ${manifest.name}</div>`;
+                    html += `<div class="info">🎨 Theme color: ${manifest.theme_color}</div>';
+                } else {
+                    html += '<div class="error">❌ Manifest not found</div>';
+                }
+            } catch (error) {
+                html += `<div class="error">❌ Manifest error: ${error.message}</div>`;
+            }
+
+            // Test installability
+            window.addEventListener('beforeinstallprompt', (e) => {
+                html += '<div class="success">✅ App is installable!</div>';
+                results.innerHTML = html;
+            });
+
+            setTimeout(() => {
+                if (!html.includes('installable')) {
+                    html += '<div class="warning">⚠️ Install prompt not detected (may already be installed)</div>';
+                }
+                results.innerHTML = html;
+            }, 1000);
+        }
+
+        function testServiceWorker() {
+            const results = document.getElementById('pwaResults');
+            results.innerHTML += '<div class="info">🔧 Testing Service Worker...</div>';
+            
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('serviceWorker.js')
+                    .then(registration => {
+                        let html = '<div class="success">✅ Service Worker registered!</div>';
+                        html += `<div class="info">🔧 Scope: ${registration.scope}</div>`;
+                        
+                        if (registration.active) {
+                            html += '<div class="success">✅ Service Worker active</div>';
+                        } else {
+                            html += '<div class="info">⏳ Service Worker installing...</div>';
+                        }
+                        
+                        results.innerHTML += html;
+                    })
+                    .catch(error => {
+                        results.innerHTML += `<div class="error">❌ Service Worker failed: ${error.message}</div>`;
+                    });
+            } else {
+                results.innerHTML += '<div class="error">❌ Service Worker not supported</div>';
+            }
+        }
+
+        // Performance Tests
+        async function testPerformance() {
+            const results = document.getElementById('performanceResults');
+            results.innerHTML = '<div class="info">⚡ Testing performance...</div>';
+            
+            const startTime = performance.now();
+            
+            // Test asset loading times
+            const assets = ['style.css', 'main.js', 'travelbot_engine.js', 'location.js', 'tts.js', 'mock.js'];
+            const loadTimes = {};
+            
+            for (const asset of assets) {
+                const assetStart = performance.now();
+                try {
+                    const response = await fetch(asset);
+                    const assetEnd = performance.now();
+                    loadTimes[asset] = Math.round(assetEnd - assetStart);
+                } catch (error) {
+                    loadTimes[asset] = 'Failed';
+                }
+            }
+            
+            const totalTime = Math.round(performance.now() - startTime);
+            
+            let html = `<div class="success">⚡ Total test time: ${totalTime}ms</div>`;
+            
+            Object.entries(loadTimes).forEach(([asset, time]) => {
+                const className = time === 'Failed' ? 'error' : (time < 100 ? 'success' : time < 500 ? 'warning' : 'error');
+                html += `<div class="${className}">📄 ${asset}: ${time}${time !== 'Failed' ? 'ms' : ''}</div>`;
+            });
+            
+            // Memory usage (if available)
+            if (performance.memory) {
+                const memory = performance.memory;
+                html += `<div class="info">🧠 Memory: ${Math.round(memory.usedJSHeapSize / 1024 / 1024)}MB used</div>`;
+            }
+            
+            results.innerHTML = html;
+        }
+
+        // Auto-run basic tests on load
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                testBrowserSupport();
+                testSecurity();
+            }, 500);
+        });
+    </script>
+</body>
+</html>
