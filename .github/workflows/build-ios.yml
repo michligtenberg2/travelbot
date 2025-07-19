@@ -1,0 +1,139 @@
+name: Build TravelBot iOS App
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-ios:
+    runs-on: macos-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    - name: Install Cordova CLI
+      run: |
+        npm install -g cordova
+        cordova --version
+
+    - name: Navigate to Cordova project and install dependencies
+      run: |
+        cd cordova-travelbot
+        if [ -f package.json ]; then npm install; fi
+
+    - name: Ensure iOS platform
+      run: |
+        cd cordova-travelbot
+        cordova platform list
+        if ! cordova platform ls | grep -q ios; then
+          cordova platform add ios
+        fi
+
+    - name: Install required plugins
+      run: |
+        cd cordova-travelbot
+        cordova plugin list
+        cordova plugin add cordova-plugin-geolocation || true
+        cordova plugin add cordova-plugin-device || true
+
+    - name: Prepare iOS build
+      run: |
+        cd cordova-travelbot
+        cordova prepare ios
+
+    - name: Build iOS app (without signing)
+      run: |
+        cd cordova-travelbot
+        cordova build ios --release --buildConfig=build.json
+
+    - name: Create build config for unsigned build
+      run: |
+        cd cordova-travelbot
+        cat > build.json << EOF
+        {
+          "ios": {
+            "release": {
+              "codeSignIdentity": "",
+              "provisioningProfile": "",
+              "developmentTeam": "",
+              "packageType": "development",
+              "buildFlag": [
+                "CODE_SIGN_IDENTITY=",
+                "CODE_SIGNING_REQUIRED=NO",
+                "CODE_SIGNING_ALLOWED=NO"
+              ]
+            }
+          }
+        }
+        EOF
+
+    - name: Archive and create IPA manually
+      run: |
+        cd cordova-travelbot/platforms/ios
+        
+        # Create export options for development
+        cat > exportOptions.plist << EOF
+        <?xml version="1.0" encoding="UTF-8"?>
+        <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+        <plist version="1.0">
+        <dict>
+          <key>method</key>
+          <string>development</string>
+          <key>compileBitcode</key>
+          <false/>
+          <key>stripSwiftSymbols</key>
+          <true/>
+          <key>thinning</key>
+          <string>&lt;none&gt;</string>
+        </dict>
+        </plist>
+        EOF
+        
+        # Build and archive
+        xcodebuild clean archive \
+          -project TravelBot.xcodeproj \
+          -scheme TravelBot \
+          -configuration Release \
+          -archivePath build/TravelBot.xcarchive \
+          CODE_SIGN_IDENTITY="" \
+          CODE_SIGNING_REQUIRED=NO \
+          CODE_SIGNING_ALLOWED=NO
+        
+        # Export IPA
+        xcodebuild -exportArchive \
+          -archivePath build/TravelBot.xcarchive \
+          -exportOptionsPlist exportOptions.plist \
+          -exportPath build/
+          
+        # Rename IPA file
+        mv build/TravelBot.ipa build/TravelBot-4.0.0.ipa 2>/dev/null || true
+        
+        # List build results
+        ls -la build/
+
+    - name: Upload IPA artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: travelbot-ios-app
+        path: |
+          cordova-travelbot/platforms/ios/build/*.ipa
+          cordova-travelbot/platforms/ios/build/TravelBot.xcarchive
+        retention-days: 30
+
+    - name: Upload to Release (if tag)
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v1
+      with:
+        files: cordova-travelbot/platforms/ios/build/*.ipa
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

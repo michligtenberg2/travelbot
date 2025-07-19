@@ -1,0 +1,67 @@
+{
+  "name": "Mich Ligtenberg's App Store",
+  "identifier": "nl.michligtenberg.appstore",
+  "sourceURL": "https://michligtenberg.nl/appstore/apps.json",
+  "website": "https://michligtenberg.nl",
+  "patreonURL": "https://patreon.com/michligtenberg",
+  "apps": [
+    {
+      "name": "TravelBot",
+      "bundleIdentifier": "com.travelbot.app",
+      "developerName": "Mich Ligtenberg",
+      "subtitle": "AI-powered travel companion",
+      "localizedDescription": "🧭 Slimme reisgenoot met sarcastische routehints, GPS navigatie, spraakherkenning en offline functionaliteit.\n\n✨ Features:\n• AI-powered route observaties\n• Real-time GPS tracking\n• Spraakherkenning en text-to-speech\n• Offline kaarten en navigatie\n• Mock GPS voor development\n• Dark/Light mode\n• Multi-language (NL/EN)\n• Personas: Heino, Sergio Herman, Neerslachtige Belg",
+      "iconURL": "https://michligtenberg.nl/appstore/icons/travelbot-icon.png",
+      "tintColor": "#2196F3",
+      "category": "utilities",
+      "screenshots": [
+        "https://michligtenberg.nl/appstore/screenshots/travelbot-main.png",
+        "https://michligtenberg.nl/appstore/screenshots/travelbot-navigation.png",
+        "https://michligtenberg.nl/appstore/screenshots/travelbot-chat.png"
+      ],
+      "versions": [
+        {
+          "version": "4.0.0",
+          "date": "2025-07-19T00:00:00Z",
+          "localizedDescription": "🎉 TravelBot v4.0 - Complete rebuild!\n\n🆕 What's New:\n• Complete UI overhaul\n• Enhanced AI personas (Heino, Sergio Herman)\n• Improved GPS accuracy\n• Better offline support\n• Mock GPS for testing\n• Faster app startup\n• Bug fixes and performance improvements",
+          "downloadURL": "https://michligtenberg.nl/appstore/ipa/TravelBot-4.0.0.ipa",
+          "size": 18500000,
+          "minOSVersion": "12.0"
+        }
+      ],
+      "appPermissions": {
+        "entitlements": [
+          {
+            "name": "com.apple.developer.location.push",
+            "reason": "Voor GPS tracking en navigatie"
+          },
+          {
+            "name": "com.apple.developer.speech-recognition",
+            "reason": "Voor spraakherkenning"
+          }
+        ],
+        "privacy": {
+          "NSLocationWhenInUseUsageDescription": "TravelBot gebruikt je locatie om sarcastische routehints te geven.",
+          "NSMicrophoneUsageDescription": "Voor spraakoutput of audio hints indien nodig.",
+          "NSSpeechRecognitionUsageDescription": "Voor gesproken output (via Web Speech of alternatief)."
+        }
+      }
+    }
+  ],
+  "news": [
+    {
+      "title": "TravelBot v4.0 Released!",
+      "identifier": "travelbot-4.0-release",
+      "caption": "AI-powered travel companion nu beschikbaar",
+      "tintColor": "#2196F3",
+      "imageURL": "https://michligtenberg.nl/appstore/news/travelbot-4.0-banner.png",
+      "date": "2025-07-19T00:00:00Z",
+      "notify": true,
+      "url": "https://michligtenberg.nl/appstore/news/travelbot-4.0-release.html"
+    }
+  ],
+  "userInfo": {
+    "patreonURL": "https://patreon.com/michligtenberg",
+    "twitterUsername": "michligtenberg"
+  }
+}
