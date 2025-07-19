@@ -5,11 +5,62 @@
 [![Codespaces Ready](https://github.com/codespaces/badge.svg)](https://github.com/codespaces)
 [![Made with Kotlin & Flask](https://img.shields.io/badge/Made%20with-Kotlin%20%26%20Flask-blue)](#)
 
-**Travelbot** is een AI-reisgenoot die iedere 15 minuten een grappige opmerking maakt over je huidige locatie. De app draait op een Android-telefoon en gebruikt een kleine Flask-backend om via OpenAI teksten op te halen.
+**Travelbot** is een AI-reisgenoot die iedere 15 minuten een grappige opmerking maakt over je huidige locatie. Beschikbaar als Android app en moderne webapp.
+
+🆕 **Nieuw: WebApp Edition** - Gebruik TravelBot nu direct in je browser met GPS ondersteuning!
 
 Lees dit document in het Engels via [README-en.md](README-en.md).
 
+## 🚀 Nieuwe Features in deze Release
+
+### 🌐 **WebApp Edition**
+- ✅ **Safari-compatible GPS webapp** - Werkt perfect op iOS/iPhone
+- ✅ **Real-time location tracking** - Geen app installatie nodig
+- ✅ **Interactive AI chat** - Chat direct met je AI reisgenoot  
+- ✅ **Multiple personas** - Amsterdammer, Belg, Brabander, Jordanees
+- ✅ **Text-to-Speech** - Gesproken commentaren in browser
+- ✅ **PWA ready** - Installeerbaar als native app
+- ✅ **Background audio support** - Audio blijft spelen bij screen lock
+
+### 🎭 **AI Character Voices (Preview)**
+- 🎤 **OpenAI TTS integration** - Studio-kwaliteit AI stemmen
+- 🎵 **Character-specific voices** - Unieke stem per persona
+- 🔊 **ElevenLabs voice cloning** - Custom character stemmen (enterprise)
+- 🎯 **Smart fallback** - Browser TTS backup
+
+### 💬 **Interactive Features**  
+- 🗨️ **Real-time chat interface** - Floating chat tijdens reis
+- 📍 **Location-based conversations** - Vragen over omgeving
+- 📱 **Mobile-optimized** - Touch-friendly interface
+- 🎨 **Responsive design** - Werkt op alle schermformaten
+
+### 🏢 **Enterprise Edition**
+- 📊 **Real-time monitoring dashboard** - Live system metrics
+- ⚡ **Advanced error handling** - Smart recovery strategies
+- 🧪 **Automated testing framework** - Quality assurance
+- 📈 **Performance analytics** - FPS, memory, API tracking
+
 ## 📦 Installatie
+
+### 🌐 WebApp (Aanbevolen - Nieuw!)
+
+**Quick Start:**
+```bash
+cd webapp
+python3 -m http.server 8080
+# Open: http://localhost:8080
+```
+
+**Features:**
+- ✅ Geen app store nodig
+- ✅ Werkt op iPhone Safari  
+- ✅ Direct GPS ondersteuning
+- ✅ Installeerbaar als PWA
+- ⚠️ **Let op**: HTTPS vereist voor GPS op mobiel
+
+[→ Volledige WebApp Setup Guide](webapp/README.md)
+
+### � Android App
 
 1. Zorg voor **Python 3.11+** en een Android-telefoon met **Android 8+**.
 2. Kloon deze repository en installeer de vereisten:
@@ -31,6 +82,48 @@ Lees dit document in het Engels via [README-en.md](README-en.md).
 5. Open de map `app/` in Android Studio, bouw de app en installeer de APK op je telefoon.
 6. Vul in de app het adres van je Render-backend in en je bent klaar!
 
+## 🔧 Gebruik
+
+### 🌐 WebApp (Nieuw!)
+
+1. **Start lokaal** (development):
+   ```bash
+   cd webapp
+   python3 -m http.server 8080
+   ```
+
+2. **Open je browser** naar `http://localhost:8080`
+
+3. **Sta GPS-toegang toe** en kies je AI reisgenoot
+
+4. **Start de reis** - TravelBot geeft automatisch commentaar elke 15 minuten
+
+**Mobile gebruikers**: Voor HTTPS/GPS ondersteuning, gebruik een tool zoals ngrok of host op een server.
+
+### 📱 Android App
+
+Open de app, selecteer je persona en **Travelbot** begint automatisch met het geven van commentaar op je reis.
+
+### 🎭 Persona's
+
+Kies uit verschillende karakters:
+- **🏛️ De Amsterdammer** - Directe, nuchtere Amsterdam-style
+- **🍺 Neerslachtige Belg** - Melancholisch maar grappig  
+- **🍻 Brabander** - Gezellige Brabantse humor
+- **👑 Jordanees** - Amsterdamse volksbuurt charme
+
+### 🎵 Voice Features
+
+**Browser TTS (Beschikbaar nu):**
+- Native browser spraaksynthese
+- Werkt op alle apparaten
+- Geen extra setup vereist
+
+**AI Voices (Preview - Binnenkort):**  
+- OpenAI studio-kwaliteit stemmen
+- ElevenLabs voice cloning
+- Karakter-specifieke stemmen
+
 ## 🎬 Voorbeeldgebruik
 
 Onderstaande afbeelding toont een voorbeeld van Heino's reactie en hoe de onderdelen samenhangen.
@@ -41,17 +134,53 @@ Onderstaande afbeelding toont een voorbeeld van Heino's reactie en hoe de onderd
 
 Meer uitleg vind je op de [GitHub Pages site](https://michligtenberg2.github.io/travelbot/). Daar staan screenshots, het update-log en een FAQ.
 
+### 📖 Project Gidsen
+
+- **[WebApp Setup Guide](webapp/README.md)** - Volledige installatie en configuratie voor webapp
+- **[Gebruikershandleiding](docs/gebruikershandleiding.md)** - Android app gebruikershandleiding
+- **[English Documentation](README-en.md)** - English version of this README
+
 ## 📂 Projectstructuur
 
 ```
-backend/   Flask API die reacties genereert
-app/       Android-app geschreven in Kotlin
-docs/      Documentatie (GitHub Pages)
+webapp/             🌐 Modern webapp met GPS & AI chat
+  ├── main.js       ⚡ Core app logic & location tracking
+  ├── tts.js        🎵 Text-to-speech & voice management
+  ├── location.js   📍 GPS tracking & location services
+  └── chat.js       💬 Interactive chat interface
+
+backend/            🖥️ Flask API die reacties genereert
+  ├── app.py        🐍 Main Flask server
+  └── personas/     🎭 Character definitions
+
+app/                📱 Android-app geschreven in Kotlin
+  └── src/          🏗️ Android source code
+
+docs/               📚 Documentatie (GitHub Pages)
 ```
 
 ## 🛠️ Troubleshooting
 
 ### Veelvoorkomende problemen en oplossingen
+
+#### 🌐 WebApp Issues
+
+**GPS werkt niet:**
+- ✅ Zorg voor HTTPS verbinding (vereist voor GPS)  
+- ✅ Sta locatietoegangstoe in je browser
+- ✅ Voor lokale development: gebruik ngrok voor HTTPS
+
+**Audio speelt niet af:**
+- ✅ Controleer browser audio permissions
+- ✅ Test of TTS ondersteund is: `speechSynthesis.getVoices()`
+- ✅ Safari: eerste audio speelt pas na user interaction
+
+**Chat reageert niet:**
+- ✅ Check browser console voor API errors
+- ✅ Controleer internetverbinding  
+- ✅ Verify OpenAI API key is correct
+
+#### 📱 Android App Issues
 
 #### Backend connectie problemen
 - **Probleem**: App kan geen verbinding maken met de backend
@@ -82,11 +211,71 @@ docs/      Documentatie (GitHub Pages)
   - Test de locatie in een gebied met goede GPS ontvangst
 
 #### Backend deployment problemen
-- **Probleem**: Server start niet of crasht
+- **Probleem**: Backend start niet op Render/Heroku
 - **Oplossing**:
-  - Controleer alle environment variabelen zijn correct ingesteld
-  - Voor Render: controleer de logs in het dashboard
-  - Zorg dat alle dependencies in `requirements.txt` staan
+  - Check dat alle dependencies in `requirements.txt` staan
+  - Verify OpenAI API key environment variable
+  - Monitor server logs voor specifieke error messages
+
+## 🚀 Technische Highlights
+
+### 🌐 WebApp Architecture
+
+**Modern Web Technologies:**
+- ✅ **PWA Ready** - Service Worker, manifest, caching
+- ✅ **WebGL/Canvas** - Hardware-accelerated graphics 
+- ✅ **Web APIs** - Geolocation, Speech Synthesis, Wake Lock
+- ✅ **ES6+ JavaScript** - Modern async/await patterns
+
+**Performance Features:**
+- 📊 **Real-time FPS monitoring** - Smooth 60fps interactions
+- 🔄 **Background sync** - Offline-capable with smart queueing  
+- ⚡ **Lazy loading** - Components loaded on demand
+- 🎯 **Smart caching** - API responses cached with TTL
+
+**Mobile Optimization:**
+- 📱 **Touch gestures** - Swipe, pinch, tap interactions
+- 🌗 **Adaptive UI** - Dark/light mode detection
+- 🔋 **Battery aware** - Reduced GPS polling on low battery
+- 📶 **Network resilient** - Offline fallbacks built-in
+
+### 🎙️ Voice System
+
+**Multi-Provider Support:**
+```javascript
+// Browser TTS (Active)
+const utterance = new SpeechSynthesisUtterance(text);
+utterance.voice = voices.find(v => v.lang === 'nl-NL');
+
+// AI Voices (Preview)  
+const audioStream = await openai.audio.speech.create({
+    model: "tts-1-hd",
+    voice: "nova", // Character-specific mapping
+    input: text
+});
+```
+
+## 🏗️ Development Roadmap
+
+### ✅ Completed (V2.0)
+- [x] Safari/iOS GPS support
+- [x] Interactive AI chat  
+- [x] Background audio continuation
+- [x] Multiple voice providers
+- [x] Enterprise monitoring dashboard
+- [x] Automated testing framework
+
+### 🔄 In Progress  
+- [ ] AI voice integration (OpenAI TTS)
+- [ ] Custom voice cloning (ElevenLabs)
+- [ ] Offline mode improvements
+- [ ] Enhanced persona conversations
+
+### 🗓️ Planned (V3.0)
+- [ ] Multi-language support (EN, DE, FR)
+- [ ] Voice command interaction
+- [ ] Trip planning integration
+- [ ] Social sharing features
 
 #### Android build problemen
 - **Probleem**: App compileert niet
