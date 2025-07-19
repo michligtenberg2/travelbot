@@ -78,14 +78,14 @@ jobs:
         # Create build directory
         mkdir -p ./build
 
-        # Create single export options plist for development distribution
+        # Create single export options plist for unsigned distribution
         cat > export-options.plist << EOF
         <?xml version="1.0" encoding="UTF-8"?>
         <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
         <plist version="1.0">
         <dict>
           <key>method</key>
-          <string>development</string>
+          <string>app-store</string>
           <key>signingStyle</key>
           <string>manual</string>
           <key>compileBitcode</key>
@@ -94,17 +94,42 @@ jobs:
           <true/>
           <key>thinning</key>
           <string>&lt;none&gt;</string>
+          <key>uploadBitcode</key>
+          <false/>
+          <key>uploadSymbols</key>
+          <false/>
         </dict>
         </plist>
         EOF
 
         # Export IPA from archive
         echo "📱 Exporting IPA from archive..."
-        xcodebuild -exportArchive \
+        if xcodebuild -exportArchive \
           -archivePath App.xcarchive \
           -exportPath ./build \
           -exportOptionsPlist export-options.plist \
-          -allowProvisioningUpdates
+          -allowProvisioningUpdates; then
+          echo "✅ Archive export successful"
+        else
+          echo "⚠️ Archive export failed, attempting manual IPA creation..."
+          
+          # Fallback: manually create IPA from .app bundle
+          APP_PATH="App.xcarchive/Products/Applications/App.app"
+          if [ -d "$APP_PATH" ]; then
+            echo "📦 Creating IPA manually from .app bundle..."
+            mkdir -p ./build/Payload
+            cp -R "$APP_PATH" ./build/Payload/
+            cd ./build
+            zip -r App.ipa Payload/
+            cd ..
+            echo "✅ Manual IPA creation successful"
+          else
+            echo "❌ Error: App.app not found in archive"
+            echo "Archive contents:"
+            find App.xcarchive -name "*.app" -type d || echo "No .app bundles found"
+            exit 1
+          fi
+        fi
 
         # Verify IPA was created and rename it
         if [ -f "./build/App.ipa" ]; then
