@@ -1,13 +1,13 @@
-# 🚗 Travelbot
+# 🧭 TravelBot v4.0 - Slimme AI Navigator
 
 [![Docs](https://github.com/michligtenberg2/travelbot/actions/workflows/update-pages.yml/badge.svg)](https://github.com/michligtenberg2/travelbot/actions/workflows/update-pages.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Codespaces Ready](https://github.com/codespaces/badge.svg)](https://github.com/codespaces)
-[![Made with Kotlin & Flask](https://img.shields.io/badge/Made%20with-Kotlin%20%26%20Flask-blue)](#)
+[![Made with Kotlin & JavaScript](https://img.shields.io/badge/Made%20with-Kotlin%20%26%20JavaScript-blue)](#)
 
-**Travelbot** is een AI-reisgenoot die iedere 15 minuten een grappige opmerking maakt over je huidige locatie. Beschikbaar als Android app en moderne webapp.
+**TravelBot v4.0** is een geavanceerde AI-reisgenoot die niet alleen sarcastische opmerkingen maakt, maar ook volledig functioneert als navigatiesysteem met real-time routing en intelligente locatiebewuste observaties.
 
-🆕 **Nieuw: v3.0 Advanced Edition** - Voice commands, meertalig, night mode en veel meer!
+🆕 **Nieuw: v4.0 Navigation Edition** - Volledige navigatie, slimme AI observaties, en kaart integratie!
 
 ## 📊 Development Roadmap
 
@@ -17,37 +17,58 @@
 
 Lees dit document in het Engels via [README-en.md](README-en.md).
 
-## 🚀 What's New in v3.0
+## 🚀 What's New in v4.0
 
-### 🗣️ **Voice Commands**
-- ✅ **Web Speech API** - Natuurlijke spraakherkenning
-- ✅ **Multi-language support** - Commands in NL/EN/DE/FR
-- ✅ **Hands-free operation** - "Waar ben ik?", "Zeg iets cynisch"
-- ✅ **Smart fallbacks** - Browser compatibility check
+### 🗺️ **Volledig Navigatiesysteem**
+- ✅ **Real-time routing** - OpenRouteService API integratie
+- ✅ **Turn-by-turn instructies** - Nederlandse spraakgeleiding  
+- ✅ **Live kaartweergave** - Leaflet.js route visualization
+- ✅ **Afstand & tijd updates** - Real-time voortgang tracking
+- ✅ **Aankomst detectie** - Automatische navigatie stop
 
-### 🌍 **Multilingual Interface**  
-- ✅ **4 Language support** - Nederlands, English, Deutsch, Français
-- ✅ **Dynamic translation** - Real-time language switching
-- ✅ **Persona responses** - Translated character responses
-- ✅ **Voice synthesis** - Multi-language TTS support
+### 🤖 **Slimme AI Observaties**
+- ✅ **Context-bewuste opmerkingen** - Alleen interessante locaties
+- ✅ **POI detectie** - OpenStreetMap Overpass API
+- ✅ **Straatnaam analyse** - Grappige/interessante namen detectie
+- ✅ **File detectie** - Traffic jam observaties
+- ✅ **Anti-spam filtering** - Minimale, zinvolle opmerkingen
 
-### 🧭 **Route-based AI Commentary**
-- ✅ **Movement analysis** - Direction, speed, pattern detection  
-- ✅ **Dynamic responses** - Comments on driving behavior
-- ✅ **Location context** - Smart geographic awareness
-- ✅ **Advanced GPS tracking** - High precision location updates
+### 🧠 **Intelligente Integratie**
+- ✅ **Navigatie-bewustheid** - Geen observaties tijdens instructies
+- ✅ **Locatie geschiedenis** - Context voor betere opmerkingen
+- ✅ **Bewegingsanalyse** - Speed/direction voor timing
+- ✅ **Multi-persona support** - Verschillende AI persoonlijkheden
 
-### 💤 **Night Mode & Theming**
-- ✅ **Automatic dark mode** - Time-based theme switching
-- ✅ **Custom color schemes** - Per persona styling
-- ✅ **Reduced brightness** - Easy on the eyes during night driving
-- ✅ **Ambient lighting** - Subtle interface animations
+### 🗺️ **Kaart & Visualisatie**
+- ✅ **Interactieve kaart** - Leaflet.js implementatie
+- ✅ **Route rendering** - Real-time route weergave
+- ✅ **Locatie markers** - Current position tracking
+- ✅ **Responsive design** - Mobile-first kaart interface
 
-### 📤 **Shareable Travel Quotes**
-- ✅ **Canvas-generated images** - Beautiful quote cards
-- ✅ **Social media ready** - Optimized for sharing
-- ✅ **Persona-themed design** - Character-specific styling
-- ✅ **One-click sharing** - Native browser share API
+## � Project Structuur (v4.0)
+
+```
+travelbot/
+├── 🌐 web-app/                 # Progressive Web App (PRIMAIR)
+│   ├── index.html              # TravelBot v4.0 web applicatie
+│   ├── navigation.js           # Volledig navigatiesysteem  
+│   ├── smart-observations.js   # Intelligente AI observaties
+│   └── ...                     # Volledige PWA implementatie
+│
+├── 🔄 shared/                  # Backend API (Flask)
+│   ├── app.py                  # Gedeelde API voor alle platforms
+│   ├── personas/               # AI persona definitjes
+│   └── requirements.txt        # Python dependencies
+│
+├── � android-app/             # Native Android (TOEKOMST)
+│   └── README.md               # Geplande Android implementatie
+│
+└── 📖 docs/                    # Project documentatie
+    └── [Bestaande documentatie]
+```
+
+**🎯 Huidige Focus**: [Web App](web-app/) is volledig functioneel als Progressive Web App
+**📱 Toekomst**: Android app wanneer user base groeit
 
 ### 🔧 **Developer Tools**
 - ✅ **Location simulation** - Test mode for development

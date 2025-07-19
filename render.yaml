@@ -1,9 +1,24 @@
+# TravelBot v4.0 - Multi-Platform Deployment
+# Use this for full-stack deployment, or deploy platforms separately
+
 services:
+  # Web App (Progressive Web App)
   - type: web
-    name: travelbot-backend
+    name: travelbot-webapp-v4
+    env: static
+    buildCommand: echo "TravelBot v4.0 Web App Build"
+    staticPublishPath: ./web-app
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+
+  # Backend API (Shared for all platforms)  
+  - type: web
+    name: travelbot-backend-v4
     env: python
-    buildCommand: "pip install -r backend/requirements.txt"
-    startCommand: "python backend/app.py"
+    buildCommand: "cd shared && pip install -r requirements.txt"
+    startCommand: "cd shared && python app.py"
     envVars:
-      - key: OPENAI_API_KEY
-        value: "<YOUR_OPENAI_API_KEY>"
+      - key: FLASK_ENV
+        value: production
