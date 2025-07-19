@@ -228,5 +228,10 @@
     "date": "2025-07-19",
     "version": "a199f27",
     "description": "Add PhoneGap Build package and build options"
+  },
+  {
+    "date": "2025-07-19",
+    "version": "51d4c9f",
+    "description": "Fix GitHub Actions iOS build workflow for Capacitor"
   }
 ]
